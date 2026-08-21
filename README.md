@@ -22,7 +22,9 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
    What awesome task can we tackle together?
    ____________________________________________________________
-   You're amazing! Keep it up, and I'll see you again soon!
+   bye
+   ____________________________________________________________
+   Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
    ____________________________________________________________
    ```
 
