@@ -224,3 +224,219 @@ ____________________________________________________________
 Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
 ____________________________________________________________
 ```
+
+## Test case: Preserve task count across rejected additions
+**Aim:** Verify that malformed additions and unknown commands interleaved with valid additions do not consume task slots or alter the valid tasks.
+
+### Inputs
+```text
+todo keep first
+todo
+deadline submit report /by Friday
+deadline missing date
+event demo /from 2pm /to 3pm
+event broken /from 2pm
+sing
+todo keep last
+list
+bye
+```
+
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What awesome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] keep first
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Oops, this kitty needs a description for your todo! Please add one after 'todo'.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[D][ ] submit report (by: Friday)
+Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+My whiskers can't find the deadline! Use: deadline DESCRIPTION /by TIME
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[E][ ] demo (from: 2pm to: 3pm)
+Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+I need the whole time trail! Use: event DESCRIPTION /from START /to END
+____________________________________________________________
+____________________________________________________________
+Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] keep last
+Now you have 4 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] keep first
+2.[D][ ] submit report (by: Friday)
+3.[E][ ] demo (from: 2pm to: 3pm)
+4.[T][ ] keep last
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```
+
+## Test case: Preserve completion state across invalid task numbers
+**Aim:** Verify that invalid mark and unmark commands interleaved with valid updates do not change any task's completion state.
+
+### Inputs
+```text
+todo first
+todo second
+mark 1
+mark 0
+unmark 3
+mark second
+list
+unmark 1
+mark 2
+unmark -1
+list
+bye
+```
+
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What awesome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] first
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] second
+Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Nice! I've marked this task as done:
+  [T][X] first
+____________________________________________________________
+____________________________________________________________
+I can't find task 0 in my basket. Check 'list' and try again!
+____________________________________________________________
+____________________________________________________________
+I can't find task 3 in my basket. Check 'list' and try again!
+____________________________________________________________
+____________________________________________________________
+My paws can only count whole task numbers. Try 'mark 1', for example!
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][X] first
+2.[T][ ] second
+____________________________________________________________
+____________________________________________________________
+OK, I've marked this task as not done yet:
+  [T][ ] first
+____________________________________________________________
+____________________________________________________________
+Nice! I've marked this task as done:
+  [T][X] second
+____________________________________________________________
+____________________________________________________________
+I can't find task -1 in my basket. Check 'list' and try again!
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] first
+2.[T][X] second
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```
+
+## Test case: Reject blank and near-match commands without changing the list
+**Aim:** Verify that empty, whitespace-only, case-mismatched, and command-prefix inputs interleaved with valid commands leave the task list unchanged.
+
+### Inputs
+```text
+list
+todo alpha
+
+todo    
+Todo beta
+todoish gamma
+list
+todo beta
+marking 1
+list
+bye
+```
+
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What awesome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] alpha
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
+____________________________________________________________
+____________________________________________________________
+Oops, this kitty needs a description for your todo! Please add one after 'todo'.
+____________________________________________________________
+____________________________________________________________
+Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
+____________________________________________________________
+____________________________________________________________
+Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] alpha
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] beta
+Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] alpha
+2.[T][ ] beta
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```
