@@ -9,6 +9,8 @@ public class PeanutButterCat {
         String banner = " /\\_/\\\n"
                 + "( o.o )  peanutbuttercat\n"
                 + " > u <";
+        String[] tasks = new String[100];
+        int taskCount = 0;
 
         System.out.println(horizontalLine);
         System.out.println(banner);
@@ -28,7 +30,15 @@ public class PeanutButterCat {
                 break;
             }
 
-            System.out.println(command);
+            if (command.equals("list")) {
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println((i + 1) + ". " + tasks[i]);
+                }
+            } else {
+                tasks[taskCount] = command;
+                taskCount++;
+                System.out.println("Pawsome! I've added: " + command);
+            }
             System.out.println(horizontalLine);
         }
     }
