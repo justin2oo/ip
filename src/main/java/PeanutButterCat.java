@@ -9,6 +9,7 @@ public class PeanutButterCat {
     private static final String TODO_COMMAND = "todo";
     private static final String DEADLINE_COMMAND = "deadline";
     private static final String EVENT_COMMAND = "event";
+    private static final String DELETE_COMMAND = "delete";
 
     /**
      * Runs the chatbot and responds to commands read from standard input.
@@ -53,6 +54,10 @@ public class PeanutButterCat {
                     tasks.get(taskIndex).markAsNotDone();
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println("  " + tasks.get(taskIndex));
+                } else if (isCommand(command, DELETE_COMMAND)) {
+                    int taskIndex = parseTaskIndex(command, DELETE_COMMAND, tasks.size());
+                    Task removedTask = tasks.remove(taskIndex);
+                    printTaskDeleted(removedTask, tasks.size());
                 } else if (isCommand(command, TODO_COMMAND)) {
                     String description = getDescription(command, TODO_COMMAND);
                     Task task = new Todo(description);
@@ -165,7 +170,7 @@ public class PeanutButterCat {
     /**
      * Parses a one-based task number and converts it to a list index.
      *
-     * @param command Full mark or unmark command entered by the user.
+     * @param command Full mark, unmark, or delete command entered by the user.
      * @param commandWord Command word preceding the task number.
      * @param numberOfTasks Number of tasks currently stored.
      * @return The corresponding zero-based list index.
@@ -214,6 +219,18 @@ public class PeanutButterCat {
     private static void printTaskAdded(Task task, int taskCount) {
         System.out.println("Got it. I've added this task:");
         System.out.println(task);
+        System.out.println("Now you have " + taskCount + " tasks in the list.");
+    }
+
+    /**
+     * Prints the confirmation shown after a task is deleted.
+     *
+     * @param task Deleted task.
+     * @param taskCount Number of tasks still stored.
+     */
+    private static void printTaskDeleted(Task task, int taskCount) {
+        System.out.println("Noted. I've removed this task:");
+        System.out.println("  " + task);
         System.out.println("Now you have " + taskCount + " tasks in the list.");
     }
 }

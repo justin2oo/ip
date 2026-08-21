@@ -441,3 +441,109 @@ ____________________________________________________________
 Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
 ____________________________________________________________
 ```
+
+## Test case: Delete a task and reject invalid delete numbers
+**Aim:** Verify that deleting a task removes it, shifts later task numbers, preserves the remaining tasks, and rejects invalid task numbers without changing the list.
+
+### Inputs
+```text
+todo read book
+deadline return book /by June 6th
+event project meeting /from Aug 6th 2pm /to 4pm
+todo join sports club
+todo borrow book
+mark 1
+mark 2
+mark 4
+list
+delete 3
+delete
+delete third
+delete 0
+delete 5
+list
+bye
+```
+
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What awesome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] read book
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[D][ ] return book (by: June 6th)
+Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+Now you have 3 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] join sports club
+Now you have 4 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] borrow book
+Now you have 5 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Nice! I've marked this task as done:
+  [T][X] read book
+____________________________________________________________
+____________________________________________________________
+Nice! I've marked this task as done:
+  [D][X] return book (by: June 6th)
+____________________________________________________________
+____________________________________________________________
+Nice! I've marked this task as done:
+  [T][X] join sports club
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][X] read book
+2.[D][X] return book (by: June 6th)
+3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+4.[T][X] join sports club
+5.[T][ ] borrow book
+____________________________________________________________
+____________________________________________________________
+Noted. I've removed this task:
+  [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+Now you have 4 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Which task should I delete? Give me its number, purr-lease!
+____________________________________________________________
+____________________________________________________________
+My paws can only count whole task numbers. Try 'delete 1', for example!
+____________________________________________________________
+____________________________________________________________
+I can't find task 0 in my basket. Check 'list' and try again!
+____________________________________________________________
+____________________________________________________________
+I can't find task 5 in my basket. Check 'list' and try again!
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in your list:
+1.[T][X] read book
+2.[D][X] return book (by: June 6th)
+3.[T][X] join sports club
+4.[T][ ] borrow book
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```
