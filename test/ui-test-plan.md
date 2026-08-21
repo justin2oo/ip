@@ -24,7 +24,7 @@ ____________________________________________________________
 ( o.o )  peanutbuttercat
  > u <
 Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What awesome task can we tackle together?
+What pawsome task can we tackle together?
 ____________________________________________________________
 ____________________________________________________________
 Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
@@ -53,38 +53,38 @@ ____________________________________________________________
 ( o.o )  peanutbuttercat
  > u <
 Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What awesome task can we tackle together?
+What pawsome task can we tackle together?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] borrow book
-Now you have 1 tasks in the list.
+My cat basket now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [D][ ] return book (by: Sunday)
-Now you have 2 tasks in the list.
+My cat basket now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [E][ ] project meeting (from: Mon 2pm to: 4pm)
-Now you have 3 tasks in the list.
+My cat basket now holds 3 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [D][ ] do homework (by: no idea :-p)
-Now you have 4 tasks in the list.
+My cat basket now holds 4 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Pawsome! I've marked this task as done:
   [D][X] return book (by: Sunday)
 ____________________________________________________________
 ____________________________________________________________
-OK, I've marked this task as not done yet:
+No paw-blem! I've marked this task as not done yet:
   [D][ ] return book (by: Sunday)
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
+Here are the tasks in my cat basket:
 1.[T][ ] borrow book
 2.[D][ ] return book (by: Sunday)
 3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
@@ -112,7 +112,7 @@ ____________________________________________________________
 ( o.o )  peanutbuttercat
  > u <
 Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What awesome task can we tackle together?
+What pawsome task can we tackle together?
 ____________________________________________________________
 ____________________________________________________________
 Oops, this kitty needs a description for your todo! Please add one after 'todo'.
@@ -147,7 +147,7 @@ ____________________________________________________________
 ( o.o )  peanutbuttercat
  > u <
 Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What awesome task can we tackle together?
+What pawsome task can we tackle together?
 ____________________________________________________________
 ____________________________________________________________
 My whiskers can't find the deadline! Use: deadline DESCRIPTION /by TIME
@@ -159,7 +159,7 @@ ____________________________________________________________
 When is it due? Add a time after '/by', purr-lease!
 ____________________________________________________________
 ____________________________________________________________
-I need the whole time trail! Use: event DESCRIPTION /from START /to END
+My whiskers need the whole time trail! Use: event DESCRIPTION /from START /to END
 ____________________________________________________________
 ____________________________________________________________
 Oops, this kitty needs a description for your event!
@@ -168,9 +168,9 @@ ____________________________________________________________
 An event needs both start and end times - no missing paws!
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] recover gracefully
-Now you have 1 tasks in the list.
+My cat basket now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
 Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
@@ -198,7 +198,7 @@ ____________________________________________________________
 ( o.o )  peanutbuttercat
  > u <
 Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What awesome task can we tackle together?
+What pawsome task can we tackle together?
 ____________________________________________________________
 ____________________________________________________________
 Which task should I mark? Give me its number, purr-lease!
@@ -207,18 +207,18 @@ ____________________________________________________________
 My paws can only count whole task numbers. Try 'mark 1', for example!
 ____________________________________________________________
 ____________________________________________________________
-I can't find task 1 in my basket. Check 'list' and try again!
+I can't find task 1 in my cat basket. Check 'list' and try again!
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] chase string
-Now you have 1 tasks in the list.
+My cat basket now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-I can't find task 2 in my basket. Check 'list' and try again!
+I can't find task 2 in my cat basket. Check 'list' and try again!
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Pawsome! I've marked this task as done:
   [T][X] chase string
 ____________________________________________________________
 ____________________________________________________________
@@ -250,42 +250,42 @@ ____________________________________________________________
 ( o.o )  peanutbuttercat
  > u <
 Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What awesome task can we tackle together?
+What pawsome task can we tackle together?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] keep first
-Now you have 1 tasks in the list.
+My cat basket now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
 Oops, this kitty needs a description for your todo! Please add one after 'todo'.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [D][ ] submit report (by: Friday)
-Now you have 2 tasks in the list.
+My cat basket now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
 My whiskers can't find the deadline! Use: deadline DESCRIPTION /by TIME
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [E][ ] demo (from: 2pm to: 3pm)
-Now you have 3 tasks in the list.
+My cat basket now holds 3 tasks.
 ____________________________________________________________
 ____________________________________________________________
-I need the whole time trail! Use: event DESCRIPTION /from START /to END
+My whiskers need the whole time trail! Use: event DESCRIPTION /from START /to END
 ____________________________________________________________
 ____________________________________________________________
 Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] keep last
-Now you have 4 tasks in the list.
+My cat basket now holds 4 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
+Here are the tasks in my cat basket:
 1.[T][ ] keep first
 2.[D][ ] submit report (by: Friday)
 3.[E][ ] demo (from: 2pm to: 3pm)
@@ -322,49 +322,49 @@ ____________________________________________________________
 ( o.o )  peanutbuttercat
  > u <
 Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What awesome task can we tackle together?
+What pawsome task can we tackle together?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] first
-Now you have 1 tasks in the list.
+My cat basket now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] second
-Now you have 2 tasks in the list.
+My cat basket now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Pawsome! I've marked this task as done:
   [T][X] first
 ____________________________________________________________
 ____________________________________________________________
-I can't find task 0 in my basket. Check 'list' and try again!
+I can't find task 0 in my cat basket. Check 'list' and try again!
 ____________________________________________________________
 ____________________________________________________________
-I can't find task 3 in my basket. Check 'list' and try again!
+I can't find task 3 in my cat basket. Check 'list' and try again!
 ____________________________________________________________
 ____________________________________________________________
 My paws can only count whole task numbers. Try 'mark 1', for example!
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
+Here are the tasks in my cat basket:
 1.[T][X] first
 2.[T][ ] second
 ____________________________________________________________
 ____________________________________________________________
-OK, I've marked this task as not done yet:
+No paw-blem! I've marked this task as not done yet:
   [T][ ] first
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Pawsome! I've marked this task as done:
   [T][X] second
 ____________________________________________________________
 ____________________________________________________________
-I can't find task -1 in my basket. Check 'list' and try again!
+I can't find task -1 in my cat basket. Check 'list' and try again!
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
+Here are the tasks in my cat basket:
 1.[T][ ] first
 2.[T][X] second
 ____________________________________________________________
@@ -398,15 +398,15 @@ ____________________________________________________________
 ( o.o )  peanutbuttercat
  > u <
 Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What awesome task can we tackle together?
+What pawsome task can we tackle together?
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
+Here are the tasks in my cat basket:
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] alpha
-Now you have 1 tasks in the list.
+My cat basket now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
 Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
@@ -421,19 +421,19 @@ ____________________________________________________________
 Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
+Here are the tasks in my cat basket:
 1.[T][ ] alpha
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] beta
-Now you have 2 tasks in the list.
+My cat basket now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
 Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
+Here are the tasks in my cat basket:
 1.[T][ ] alpha
 2.[T][ ] beta
 ____________________________________________________________
@@ -472,47 +472,47 @@ ____________________________________________________________
 ( o.o )  peanutbuttercat
  > u <
 Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What awesome task can we tackle together?
+What pawsome task can we tackle together?
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] read book
-Now you have 1 tasks in the list.
+My cat basket now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [D][ ] return book (by: June 6th)
-Now you have 2 tasks in the list.
+My cat basket now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
-Now you have 3 tasks in the list.
+My cat basket now holds 3 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] join sports club
-Now you have 4 tasks in the list.
+My cat basket now holds 4 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Got it. I've added this task:
+Purr-fect! I've added this task to my cat basket:
 [T][ ] borrow book
-Now you have 5 tasks in the list.
+My cat basket now holds 5 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Pawsome! I've marked this task as done:
   [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Pawsome! I've marked this task as done:
   [D][X] return book (by: June 6th)
 ____________________________________________________________
 ____________________________________________________________
-Nice! I've marked this task as done:
+Pawsome! I've marked this task as done:
   [T][X] join sports club
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
+Here are the tasks in my cat basket:
 1.[T][X] read book
 2.[D][X] return book (by: June 6th)
 3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
@@ -520,9 +520,9 @@ Here are the tasks in your list:
 5.[T][ ] borrow book
 ____________________________________________________________
 ____________________________________________________________
-Noted. I've removed this task:
+Purr-fect! I've removed this task from my cat basket:
   [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
-Now you have 4 tasks in the list.
+My cat basket now holds 4 tasks.
 ____________________________________________________________
 ____________________________________________________________
 Which task should I delete? Give me its number, purr-lease!
@@ -531,13 +531,13 @@ ____________________________________________________________
 My paws can only count whole task numbers. Try 'delete 1', for example!
 ____________________________________________________________
 ____________________________________________________________
-I can't find task 0 in my basket. Check 'list' and try again!
+I can't find task 0 in my cat basket. Check 'list' and try again!
 ____________________________________________________________
 ____________________________________________________________
-I can't find task 5 in my basket. Check 'list' and try again!
+I can't find task 5 in my cat basket. Check 'list' and try again!
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in your list:
+Here are the tasks in my cat basket:
 1.[T][X] read book
 2.[D][X] return book (by: June 6th)
 3.[T][X] join sports club

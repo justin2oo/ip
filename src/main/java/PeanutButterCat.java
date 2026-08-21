@@ -26,7 +26,7 @@ public class PeanutButterCat {
         System.out.println(horizontalLine);
         System.out.println(banner);
         System.out.println("Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!");
-        System.out.println("What awesome task can we tackle together?");
+        System.out.println("What pawsome task can we tackle together?");
         System.out.println(horizontalLine);
 
         Scanner scanner = new Scanner(System.in);
@@ -47,12 +47,12 @@ public class PeanutButterCat {
                 } else if (isCommand(command, "mark")) {
                     int taskIndex = parseTaskIndex(command, "mark", tasks.size());
                     tasks.get(taskIndex).markAsDone();
-                    System.out.println("Nice! I've marked this task as done:");
+                    System.out.println("Pawsome! I've marked this task as done:");
                     System.out.println("  " + tasks.get(taskIndex));
                 } else if (isCommand(command, "unmark")) {
                     int taskIndex = parseTaskIndex(command, "unmark", tasks.size());
                     tasks.get(taskIndex).markAsNotDone();
-                    System.out.println("OK, I've marked this task as not done yet:");
+                    System.out.println("No paw-blem! I've marked this task as not done yet:");
                     System.out.println("  " + tasks.get(taskIndex));
                 } else if (isCommand(command, DELETE_COMMAND)) {
                     int taskIndex = parseTaskIndex(command, DELETE_COMMAND, tasks.size());
@@ -151,7 +151,7 @@ public class PeanutButterCat {
         int fromIndex = details.indexOf("/from");
         int toIndex = fromIndex < 0 ? -1 : details.indexOf("/to", fromIndex + "/from".length());
         if (fromIndex < 0 || toIndex < 0) {
-            throw new PeanutButterCatException("I need the whole time trail! Use: "
+            throw new PeanutButterCatException("My whiskers need the whole time trail! Use: "
                     + "event DESCRIPTION /from START /to END");
         }
 
@@ -193,7 +193,7 @@ public class PeanutButterCat {
         }
         if (taskNumber < 1 || taskNumber > numberOfTasks) {
             throw new PeanutButterCatException("I can't find task " + taskNumber
-                    + " in my basket. Check 'list' and try again!");
+                    + " in my cat basket. Check 'list' and try again!");
         }
         return taskNumber - 1;
     }
@@ -204,7 +204,7 @@ public class PeanutButterCat {
      * @param tasks List containing the stored tasks.
      */
     private static void printTaskList(List<Task> tasks) {
-        System.out.println("Here are the tasks in your list:");
+        System.out.println("Here are the tasks in my cat basket:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
         }
@@ -217,9 +217,9 @@ public class PeanutButterCat {
      * @param taskCount Number of tasks currently stored.
      */
     private static void printTaskAdded(Task task, int taskCount) {
-        System.out.println("Got it. I've added this task:");
+        System.out.println("Purr-fect! I've added this task to my cat basket:");
         System.out.println(task);
-        System.out.println("Now you have " + taskCount + " tasks in the list.");
+        printTaskCount(taskCount);
     }
 
     /**
@@ -229,8 +229,18 @@ public class PeanutButterCat {
      * @param taskCount Number of tasks still stored.
      */
     private static void printTaskDeleted(Task task, int taskCount) {
-        System.out.println("Noted. I've removed this task:");
+        System.out.println("Purr-fect! I've removed this task from my cat basket:");
         System.out.println("  " + task);
-        System.out.println("Now you have " + taskCount + " tasks in the list.");
+        printTaskCount(taskCount);
+    }
+
+    /**
+     * Prints the current task count using the correct singular or plural noun.
+     *
+     * @param taskCount Number of tasks currently stored.
+     */
+    private static void printTaskCount(int taskCount) {
+        String taskWord = taskCount == 1 ? "task" : "tasks";
+        System.out.println("My cat basket now holds " + taskCount + " " + taskWord + ".");
     }
 }
