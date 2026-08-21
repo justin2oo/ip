@@ -93,3 +93,134 @@ ____________________________________________________________
 Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
 ____________________________________________________________
 ```
+
+## Test case: Reject empty todos and unknown commands
+**Aim:** Verify that an empty todo description and an unknown command produce friendly errors without stopping the chatbot.
+
+### Inputs
+```text
+todo
+sing
+bye
+```
+
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What awesome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Oops, this kitty needs a description for your todo! Please add one after 'todo'.
+____________________________________________________________
+____________________________________________________________
+Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```
+
+## Test case: Reject incomplete deadline and event details
+**Aim:** Verify that missing task descriptions and date or time fields produce useful errors and that the chatbot continues accepting commands.
+
+### Inputs
+```text
+deadline return book
+deadline /by Sunday
+deadline return book /by
+event team meeting
+event /from 2pm /to 3pm
+event team meeting /from /to 3pm
+todo recover gracefully
+bye
+```
+
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What awesome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+My whiskers can't find the deadline! Use: deadline DESCRIPTION /by TIME
+____________________________________________________________
+____________________________________________________________
+Oops, this kitty needs a description for your deadline!
+____________________________________________________________
+____________________________________________________________
+When is it due? Add a time after '/by', purr-lease!
+____________________________________________________________
+____________________________________________________________
+I need the whole time trail! Use: event DESCRIPTION /from START /to END
+____________________________________________________________
+____________________________________________________________
+Oops, this kitty needs a description for your event!
+____________________________________________________________
+____________________________________________________________
+An event needs both start and end times - no missing paws!
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] recover gracefully
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```
+
+## Test case: Reject invalid task numbers
+**Aim:** Verify that missing, non-numeric, and out-of-range task numbers are handled without crashing or corrupting existing tasks.
+
+### Inputs
+```text
+mark
+mark first
+mark 1
+todo chase string
+unmark 2
+mark 1
+bye
+```
+
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What awesome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Which task should I mark? Give me its number, purr-lease!
+____________________________________________________________
+____________________________________________________________
+My paws can only count whole task numbers. Try 'mark 1', for example!
+____________________________________________________________
+____________________________________________________________
+I can't find task 1 in my basket. Check 'list' and try again!
+____________________________________________________________
+____________________________________________________________
+Got it. I've added this task:
+[T][ ] chase string
+Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+I can't find task 2 in my basket. Check 'list' and try again!
+____________________________________________________________
+____________________________________________________________
+Nice! I've marked this task as done:
+  [T][X] chase string
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```
