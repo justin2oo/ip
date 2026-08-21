@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -7,7 +9,6 @@ public class PeanutButterCat {
     private static final String TODO_COMMAND = "todo";
     private static final String DEADLINE_COMMAND = "deadline";
     private static final String EVENT_COMMAND = "event";
-    private static final int MAX_TASKS = 100;
 
     /**
      * Runs the chatbot and responds to commands read from standard input.
@@ -19,8 +20,7 @@ public class PeanutButterCat {
         String banner = " /\\_/\\\n"
                 + "( o.o )  peanutbuttercat\n"
                 + " > u <";
-        Task[] tasks = new Task[MAX_TASKS];
-        int taskCount = 0;
+        List<Task> tasks = new ArrayList<>();
 
         System.out.println(horizontalLine);
         System.out.println(banner);
@@ -42,35 +42,32 @@ public class PeanutButterCat {
 
             try {
                 if (command.equals("list")) {
-                    printTaskList(tasks, taskCount);
+                    printTaskList(tasks);
                 } else if (isCommand(command, "mark")) {
-                    int taskIndex = parseTaskIndex(command, "mark", taskCount);
-                    tasks[taskIndex].markAsDone();
+                    int taskIndex = parseTaskIndex(command, "mark", tasks.size());
+                    tasks.get(taskIndex).markAsDone();
                     System.out.println("Nice! I've marked this task as done:");
-                    System.out.println("  " + tasks[taskIndex]);
+                    System.out.println("  " + tasks.get(taskIndex));
                 } else if (isCommand(command, "unmark")) {
-                    int taskIndex = parseTaskIndex(command, "unmark", taskCount);
-                    tasks[taskIndex].markAsNotDone();
+                    int taskIndex = parseTaskIndex(command, "unmark", tasks.size());
+                    tasks.get(taskIndex).markAsNotDone();
                     System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println("  " + tasks[taskIndex]);
+                    System.out.println("  " + tasks.get(taskIndex));
                 } else if (isCommand(command, TODO_COMMAND)) {
-                    ensureTaskListHasSpace(taskCount);
                     String description = getDescription(command, TODO_COMMAND);
-                    tasks[taskCount] = new Todo(description);
-                    taskCount++;
-                    printTaskAdded(tasks[taskCount - 1], taskCount);
+                    Task task = new Todo(description);
+                    tasks.add(task);
+                    printTaskAdded(task, tasks.size());
                 } else if (isCommand(command, DEADLINE_COMMAND)) {
-                    ensureTaskListHasSpace(taskCount);
                     String[] deadlineDetails = parseDeadline(command);
-                    tasks[taskCount] = new Deadline(deadlineDetails[0], deadlineDetails[1]);
-                    taskCount++;
-                    printTaskAdded(tasks[taskCount - 1], taskCount);
+                    Task task = new Deadline(deadlineDetails[0], deadlineDetails[1]);
+                    tasks.add(task);
+                    printTaskAdded(task, tasks.size());
                 } else if (isCommand(command, EVENT_COMMAND)) {
-                    ensureTaskListHasSpace(taskCount);
                     String[] eventDetails = parseEvent(command);
-                    tasks[taskCount] = new Event(eventDetails[0], eventDetails[1], eventDetails[2]);
-                    taskCount++;
-                    printTaskAdded(tasks[taskCount - 1], taskCount);
+                    Task task = new Event(eventDetails[0], eventDetails[1], eventDetails[2]);
+                    tasks.add(task);
+                    printTaskAdded(task, tasks.size());
                 } else {
                     throw new PeanutButterCatException("Hiss-terical mix-up! I don't know that command yet. "
                             + "Try another one, purr-lease!");
@@ -166,15 +163,15 @@ public class PeanutButterCat {
     }
 
     /**
-     * Parses a one-based task number and converts it to an array index.
+     * Parses a one-based task number and converts it to a list index.
      *
      * @param command Full mark or unmark command entered by the user.
      * @param commandWord Command word preceding the task number.
-     * @param taskCount Number of tasks currently stored.
-     * @return The corresponding zero-based array index.
+     * @param numberOfTasks Number of tasks currently stored.
+     * @return The corresponding zero-based list index.
      * @throws PeanutButterCatException If the task number is missing, malformed, or out of range.
      */
-    private static int parseTaskIndex(String command, String commandWord, int taskCount)
+    private static int parseTaskIndex(String command, String commandWord, int numberOfTasks)
             throws PeanutButterCatException {
         String numberText = command.substring(commandWord.length()).trim();
         if (numberText.isEmpty()) {
@@ -189,7 +186,7 @@ public class PeanutButterCat {
             throw new PeanutButterCatException("My paws can only count whole task numbers. "
                     + "Try '" + commandWord + " 1', for example!");
         }
-        if (taskNumber < 1 || taskNumber > taskCount) {
+        if (taskNumber < 1 || taskNumber > numberOfTasks) {
             throw new PeanutButterCatException("I can't find task " + taskNumber
                     + " in my basket. Check 'list' and try again!");
         }
@@ -197,28 +194,14 @@ public class PeanutButterCat {
     }
 
     /**
-     * Checks that another task can be stored without overflowing the fixed-size task list.
-     *
-     * @param taskCount Number of tasks currently stored.
-     * @throws PeanutButterCatException If the task list is full.
-     */
-    private static void ensureTaskListHasSpace(int taskCount) throws PeanutButterCatException {
-        if (taskCount >= MAX_TASKS) {
-            throw new PeanutButterCatException("My task basket is full with " + MAX_TASKS
-                    + " tasks! Finish some before adding more, purr-lease.");
-        }
-    }
-
-    /**
      * Prints all tasks currently stored in the list.
      *
-     * @param tasks Array containing the stored tasks.
-     * @param taskCount Number of tasks currently stored.
+     * @param tasks List containing the stored tasks.
      */
-    private static void printTaskList(Task[] tasks, int taskCount) {
+    private static void printTaskList(List<Task> tasks) {
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println((i + 1) + "." + tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
         }
     }
 

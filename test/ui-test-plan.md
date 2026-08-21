@@ -5,6 +5,7 @@
 - Main class: `PeanutButterCat`
 - Source directory: `src/main/java`
 - Required Java major version: `25`
+- Capacity: The task list grows dynamically and has no fixed 100-task limit.
 - Isolation: Each test case starts a fresh application process. Inputs within a test case run in order in the same process.
 - Comparison: Output must match exactly after normalizing CRLF/LF line endings and ignoring one final line terminator.
 
