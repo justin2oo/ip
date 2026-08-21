@@ -6,11 +6,6 @@ import java.util.Scanner;
  * Starts the peanutbuttercat chatbot.
  */
 public class PeanutButterCat {
-    private static final String TODO_COMMAND = "todo";
-    private static final String DEADLINE_COMMAND = "deadline";
-    private static final String EVENT_COMMAND = "event";
-    private static final String DELETE_COMMAND = "delete";
-
     /**
      * Runs the chatbot and responds to commands read from standard input.
      *
@@ -32,9 +27,10 @@ public class PeanutButterCat {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
+            CommandType commandType = CommandType.fromInput(command);
 
             System.out.println(horizontalLine);
-            if (command.equals("bye")) {
+            if (commandType == CommandType.BYE) {
                 System.out.println("Bye! Hope to see you again soon. Stay pawsitive and keep spreading "
                         + "the peanut butter!");
                 System.out.println(horizontalLine);
@@ -42,57 +38,49 @@ public class PeanutButterCat {
             }
 
             try {
-                if (command.equals("list")) {
+                switch (commandType) {
+                case LIST:
                     printTaskList(tasks);
-                } else if (isCommand(command, "mark")) {
-                    int taskIndex = parseTaskIndex(command, "mark", tasks.size());
-                    tasks.get(taskIndex).markAsDone();
-                    System.out.println("Pawsome! I've marked this task as done:");
-                    System.out.println("  " + tasks.get(taskIndex));
-                } else if (isCommand(command, "unmark")) {
-                    int taskIndex = parseTaskIndex(command, "unmark", tasks.size());
-                    tasks.get(taskIndex).markAsNotDone();
-                    System.out.println("No paw-blem! I've marked this task as not done yet:");
-                    System.out.println("  " + tasks.get(taskIndex));
-                } else if (isCommand(command, DELETE_COMMAND)) {
-                    int taskIndex = parseTaskIndex(command, DELETE_COMMAND, tasks.size());
+                    break;
+                case MARK:
+                    updateTaskStatus(command, commandType, tasks, true);
+                    break;
+                case UNMARK:
+                    updateTaskStatus(command, commandType, tasks, false);
+                    break;
+                case DELETE:
+                    int taskIndex = parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
                     Task removedTask = tasks.remove(taskIndex);
                     printTaskDeleted(removedTask, tasks.size());
-                } else if (isCommand(command, TODO_COMMAND)) {
-                    String description = getDescription(command, TODO_COMMAND);
-                    Task task = new Todo(description);
-                    tasks.add(task);
-                    printTaskAdded(task, tasks.size());
-                } else if (isCommand(command, DEADLINE_COMMAND)) {
+                    break;
+                case TODO:
+                    String description = getDescription(command, commandType.getCommandWord());
+                    Task todo = new Todo(description);
+                    tasks.add(todo);
+                    printTaskAdded(todo, tasks.size());
+                    break;
+                case DEADLINE:
                     String[] deadlineDetails = parseDeadline(command);
-                    Task task = new Deadline(deadlineDetails[0], deadlineDetails[1]);
-                    tasks.add(task);
-                    printTaskAdded(task, tasks.size());
-                } else if (isCommand(command, EVENT_COMMAND)) {
+                    Task deadline = new Deadline(deadlineDetails[0], deadlineDetails[1]);
+                    tasks.add(deadline);
+                    printTaskAdded(deadline, tasks.size());
+                    break;
+                case EVENT:
                     String[] eventDetails = parseEvent(command);
-                    Task task = new Event(eventDetails[0], eventDetails[1], eventDetails[2]);
-                    tasks.add(task);
-                    printTaskAdded(task, tasks.size());
-                } else {
-                    throw new PeanutButterCatException("Hiss-terical mix-up! I don't know that command yet. "
-                            + "Try another one, purr-lease!");
+                    Task event = new Event(eventDetails[0], eventDetails[1], eventDetails[2]);
+                    tasks.add(event);
+                    printTaskAdded(event, tasks.size());
+                    break;
+                case BYE, UNKNOWN:
+                    throw new PeanutButterCatException(
+                            "Hiss-terical mix-up! I don't know that command yet. "
+                                    + "Try another one, purr-lease!");
                 }
             } catch (PeanutButterCatException exception) {
                 System.out.println(exception.getMessage());
             }
             System.out.println(horizontalLine);
         }
-    }
-
-    /**
-     * Returns whether the input contains the given command word, optionally followed by arguments.
-     *
-     * @param input Full input entered by the user.
-     * @param commandWord Command word to look for.
-     * @return True when the input starts with the complete command word.
-     */
-    private static boolean isCommand(String input, String commandWord) {
-        return input.equals(commandWord) || input.startsWith(commandWord + " ");
     }
 
     /**
@@ -121,7 +109,7 @@ public class PeanutButterCat {
      * @throws PeanutButterCatException If a required deadline detail is missing.
      */
     private static String[] parseDeadline(String command) throws PeanutButterCatException {
-        String details = command.substring(DEADLINE_COMMAND.length()).trim();
+        String details = command.substring(CommandType.DEADLINE.getCommandWord().length()).trim();
         int byIndex = details.indexOf("/by");
         if (byIndex < 0) {
             throw new PeanutButterCatException("My whiskers can't find the deadline! Use: "
@@ -147,7 +135,7 @@ public class PeanutButterCat {
      * @throws PeanutButterCatException If a required event detail is missing.
      */
     private static String[] parseEvent(String command) throws PeanutButterCatException {
-        String details = command.substring(EVENT_COMMAND.length()).trim();
+        String details = command.substring(CommandType.EVENT.getCommandWord().length()).trim();
         int fromIndex = details.indexOf("/from");
         int toIndex = fromIndex < 0 ? -1 : details.indexOf("/to", fromIndex + "/from".length());
         if (fromIndex < 0 || toIndex < 0) {
@@ -196,6 +184,29 @@ public class PeanutButterCat {
                     + " in my cat basket. Check 'list' and try again!");
         }
         return taskNumber - 1;
+    }
+
+    /**
+     * Marks or unmarks the task selected by the command.
+     *
+     * @param command Full mark or unmark command entered by the user.
+     * @param commandType Type of status-changing command.
+     * @param tasks List containing the stored tasks.
+     * @param isDone Whether the selected task should be marked as done.
+     * @throws PeanutButterCatException If the task number is invalid.
+     */
+    private static void updateTaskStatus(String command, CommandType commandType,
+            List<Task> tasks, boolean isDone) throws PeanutButterCatException {
+        int taskIndex = parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
+        Task task = tasks.get(taskIndex);
+        if (isDone) {
+            task.markAsDone();
+            System.out.println("Pawsome! I've marked this task as done:");
+        } else {
+            task.markAsNotDone();
+            System.out.println("No paw-blem! I've marked this task as not done yet:");
+        }
+        System.out.println("  " + task);
     }
 
     /**
