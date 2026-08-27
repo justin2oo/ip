@@ -37,6 +37,12 @@ After every application code update:
 
 Do not consider the code update complete until this UI test session has finished. If a test fails, follow the skill's stop-on-first-failure rule and report the actual and expected outputs instead of continuing with later cases.
 
+## JUnit test coverage target
+
+Maintain JUnit tests for at least the top 50% of the codebase's highest-value methods, prioritizing complex, core, or critical business logic.
+
+After every code change, review the affected JUnit tests and update or add tests as needed so that they remain accurate and continue to meet the 50% coverage target. Do not consider a code change complete until the relevant JUnit tests have been updated and pass.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
