@@ -5,11 +5,24 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
 
 /**
  * Starts the peanutbuttercat chatbot.
  */
 public class PeanutButterCat {
+    private static final DateTimeFormatter DISPLAY_DATE = DateTimeFormatter.ofPattern("MMM dd yyyy");
+    private static final DateTimeFormatter[] INPUT_FORMATS = {
+        DateTimeFormatter.ofPattern("d/M/uuuu HHmm"),
+        DateTimeFormatter.ofPattern("d/M/uuuu HH:mm"),
+        DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm"),
+        DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm"),
+        DateTimeFormatter.ofPattern("uuuu-MM-dd")
+    };
     /** Relative, OS-independent location used for the application's saved tasks. */
     private static final Path SAVE_FILE = Path.of("data", "duke.txt");
 
@@ -70,17 +83,21 @@ public class PeanutButterCat {
                     break;
                 case DEADLINE:
                     String[] deadlineDetails = parseDeadline(command);
-                    Task deadline = new Deadline(deadlineDetails[0], deadlineDetails[1]);
+                    Task deadline = new Deadline(deadlineDetails[0], parseDateTime(deadlineDetails[1]));
                     tasks.add(deadline);
                     saveTasks(tasks);
                     printTaskAdded(deadline, tasks.size());
                     break;
                 case EVENT:
                     String[] eventDetails = parseEvent(command);
-                    Task event = new Event(eventDetails[0], eventDetails[1], eventDetails[2]);
+                    Task event = new Event(eventDetails[0], parseDateTime(eventDetails[1]),
+                            parseDateTime(eventDetails[2]));
                     tasks.add(event);
                     saveTasks(tasks);
                     printTaskAdded(event, tasks.size());
+                    break;
+                case ON:
+                    printTasksOnDate(parseDate(command), tasks);
                     break;
                 case BYE, UNKNOWN:
                     throw new PeanutButterCatException(
@@ -135,6 +152,7 @@ public class PeanutButterCat {
         if (by.isEmpty()) {
             throw new PeanutButterCatException("When is it due? Add a time after '/by', purr-lease!");
         }
+        parseDateTime(by);
         return new String[]{description, by};
     }
 
@@ -163,7 +181,36 @@ public class PeanutButterCat {
         if (from.isEmpty() || to.isEmpty()) {
             throw new PeanutButterCatException("An event needs both start and end times - no missing paws!");
         }
+        parseDateTime(from);
+        parseDateTime(to);
         return new String[]{description, from, to};
+    }
+
+    private static LocalDateTime parseDateTime(String value) throws PeanutButterCatException {
+        for (DateTimeFormatter format : INPUT_FORMATS) {
+            try {
+                TemporalAccessor parsed = format.parse(value);
+                LocalDate date = LocalDate.from(parsed);
+                return parsed.isSupported(java.time.temporal.ChronoField.HOUR_OF_DAY)
+                        ? LocalDateTime.from(parsed) : date.atStartOfDay();
+            } catch (DateTimeParseException ignored) {
+                // Try the next accepted input format.
+            }
+        }
+        throw new PeanutButterCatException("I couldn't understand that date. Use yyyy-MM-dd "
+                + "or d/M/yyyy HHmm, purr-lease!");
+    }
+
+    private static LocalDate parseDate(String command) throws PeanutButterCatException {
+        String value = command.substring(CommandType.ON.getCommandWord().length()).trim();
+        if (value.isEmpty()) {
+            throw new PeanutButterCatException("Which date should I search? Use: on yyyy-MM-dd");
+        }
+        try {
+            return parseDateTime(value).toLocalDate();
+        } catch (PeanutButterCatException exception) {
+            throw new PeanutButterCatException("I couldn't understand that date. Use yyyy-MM-dd, purr-lease!");
+        }
     }
 
     /**
@@ -300,11 +347,11 @@ public class PeanutButterCat {
             break;
         case "D":
             requireFieldCount(details, 4);
-            task = new Deadline(details[2], details[3]);
+            task = new Deadline(details[2], parseStoredDateTime(details[3]));
             break;
         case "E":
             requireFieldCount(details, 5);
-            task = new Event(details[2], details[3], details[4]);
+            task = new Event(details[2], parseStoredDateTime(details[3]), parseStoredDateTime(details[4]));
             break;
         default:
             throw new IllegalArgumentException("Unknown task type in saved data: " + details[0]);
@@ -360,6 +407,29 @@ public class PeanutButterCat {
         System.out.println("Here are the tasks in my cat basket:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    private static LocalDateTime parseStoredDateTime(String value) {
+        try {
+            return LocalDateTime.parse(value);
+        } catch (DateTimeParseException exception) {
+            throw new IllegalArgumentException("Invalid stored date", exception);
+        }
+    }
+
+    private static void printTasksOnDate(LocalDate date, List<Task> tasks) {
+        System.out.println("Here are the tasks on " + date.format(DISPLAY_DATE) + ":");
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            boolean matches = task instanceof Deadline deadline
+                    && deadline.getBy().toLocalDate().equals(date)
+                    || task instanceof Event event
+                    && (!event.getFrom().toLocalDate().isAfter(date)
+                    && !event.getTo().toLocalDate().isBefore(date));
+            if (matches) {
+                System.out.println((i + 1) + "." + task);
+            }
         }
     }
 
