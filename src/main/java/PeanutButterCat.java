@@ -48,13 +48,6 @@ public class PeanutButterCat {
                     STORAGE.save(tasks);
                     UI.showTaskDeleted(removedTask, tasks.size());
                     break;
-                case TODO:
-                    String description = PARSER.getDescription(command, commandType.getCommandWord());
-                    Task todo = new Todo(description);
-                    tasks.add(todo);
-                    STORAGE.save(tasks);
-                    UI.showTaskAdded(todo, tasks.size());
-                    break;
                 case DEADLINE:
                     String[] deadlineDetails = PARSER.parseDeadline(command);
                     Task deadline = new Deadline(deadlineDetails[0], PARSER.parseDateTime(deadlineDetails[1]));

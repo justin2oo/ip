@@ -28,10 +28,11 @@ public class Parser {
      * @return The corresponding command, or {@code null} while a command is still handled by
      *         the transition switch in the application coordinator.
      */
-    public Command parse(String input) {
+    public Command parse(String input) throws PeanutButterCatException {
         return switch (parseCommandType(input)) {
         case BYE -> new ExitCommand();
         case LIST -> new ListCommand();
+        case TODO -> new TodoCommand(getDescription(input, CommandType.TODO.getCommandWord()));
         default -> null;
         };
     }
