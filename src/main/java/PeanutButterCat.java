@@ -21,16 +21,18 @@ public class PeanutButterCat {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine().trim();
-            CommandType commandType = PARSER.parseCommandType(command);
-
             UI.showLine();
-            if (commandType == CommandType.BYE) {
-                UI.showFarewell();
-                break;
-            }
 
             try {
-                switch (commandType) {
+                Command parsedCommand = PARSER.parse(command);
+                if (parsedCommand != null) {
+                    parsedCommand.execute(tasks, UI, STORAGE);
+                    if (parsedCommand.isExit()) {
+                        break;
+                    }
+                } else {
+                    CommandType commandType = PARSER.parseCommandType(command);
+                    switch (commandType) {
                 case LIST:
                     UI.showTaskList(tasks);
                     break;
@@ -75,6 +77,7 @@ public class PeanutButterCat {
                     throw new PeanutButterCatException(
                             "Hiss-terical mix-up! I don't know that command yet. "
                                     + "Try another one, purr-lease!");
+                    }
                 }
             } catch (PeanutButterCatException exception) {
                 UI.showError(exception.getMessage());
