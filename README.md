@@ -29,3 +29,27 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Build and run the executable JAR
+
+This project uses the Gradle Shadow plugin to package the application and its runtime dependencies into one executable (fat) JAR.
+
+From the project root, use JDK 25 and run:
+
+```powershell
+.\gradlew.bat shadowJar
+```
+
+The generated file is:
+
+```text
+build\libs\duke.jar
+```
+
+Run it from the project root with:
+
+```powershell
+java -jar build\libs\duke.jar
+```
+
+The application stores tasks in `data\duke.txt`, relative to the directory from which the JAR is run. To rebuild a fresh JAR, run `.\gradlew.bat clean shadowJar`; `clean` removes previous build outputs before Shadow creates the new JAR.
