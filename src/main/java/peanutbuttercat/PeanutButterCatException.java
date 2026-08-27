@@ -1,3 +1,5 @@
+package peanutbuttercat;
+
 /**
  * Represents an input error that peanutbuttercat can explain to the user.
  */

@@ -1,3 +1,5 @@
+package peanutbuttercat;
+
 import java.util.Scanner;
 
 /**

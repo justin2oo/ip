@@ -1,3 +1,5 @@
+package peanutbuttercat;
+
 /**
  * Represents the shared description and completion state of a task.
  */

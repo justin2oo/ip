@@ -1,3 +1,5 @@
+package peanutbuttercat;
+
 /**
  * Represents a command understood by the chatbot.
  */
