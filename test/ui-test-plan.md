@@ -465,6 +465,39 @@ list
 bye
 ```
 
+## Test case: Accept harmless surrounding whitespace
+**Aim:** Verify that leading and trailing whitespace does not turn an otherwise valid command into an error.
+
+### Inputs
+```text
+  todo spaced task  
+list   
+bye
+```
+
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What pawsome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Purr-fect! I've added this task to my cat basket:
+[T][ ] spaced task
+My cat basket now holds 1 task.
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in my cat basket:
+1.[T][ ] spaced task
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```
+
 ### Expected output
 ```text
 ____________________________________________________________

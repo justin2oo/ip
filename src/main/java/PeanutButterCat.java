@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -31,7 +32,7 @@ public class PeanutButterCat {
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
-            String command = scanner.nextLine();
+            String command = scanner.nextLine().trim();
             CommandType commandType = CommandType.fromInput(command);
 
             System.out.println(horizontalLine);
@@ -232,8 +233,19 @@ public class PeanutButterCat {
 
         try {
             Files.createDirectories(SAVE_FILE.getParent());
-            Files.write(SAVE_FILE, taskRecords);
-        } catch (IOException exception) {
+            Path temporaryFile = Files.createTempFile(SAVE_FILE.getParent(), "duke", ".tmp");
+            try {
+                Files.write(temporaryFile, taskRecords);
+                try {
+                    Files.move(temporaryFile, SAVE_FILE, StandardCopyOption.REPLACE_EXISTING,
+                            StandardCopyOption.ATOMIC_MOVE);
+                } catch (java.nio.file.AtomicMoveNotSupportedException exception) {
+                    Files.move(temporaryFile, SAVE_FILE, StandardCopyOption.REPLACE_EXISTING);
+                }
+            } finally {
+                Files.deleteIfExists(temporaryFile);
+            }
+        } catch (IOException | SecurityException exception) {
             System.err.println("Unable to save tasks: " + exception.getMessage());
         }
     }
@@ -250,11 +262,19 @@ public class PeanutButterCat {
         }
 
         try {
+            int lineNumber = 0;
             for (String taskRecord : Files.readAllLines(SAVE_FILE)) {
-                Task task = createTaskFromRecord(taskRecord);
-                tasks.add(task);
+                lineNumber++;
+                if (taskRecord.isBlank()) {
+                    continue;
+                }
+                try {
+                    tasks.add(createTaskFromRecord(taskRecord));
+                } catch (IllegalArgumentException exception) {
+                    System.err.println("Ignoring invalid task record at line " + lineNumber + ".");
+                }
             }
-        } catch (IOException exception) {
+        } catch (IOException | SecurityException exception) {
             System.err.println("Unable to load tasks: " + exception.getMessage());
         }
         return tasks;
@@ -267,16 +287,23 @@ public class PeanutButterCat {
      * @return The recreated task.
      */
     private static Task createTaskFromRecord(String taskRecord) {
-        String[] details = taskRecord.split(" \\| ", -1);
+        String[] details = splitStorageRecord(taskRecord);
+        if (details.length < 3 || details.length > 5
+                || (!details[1].equals("0") && !details[1].equals("1"))) {
+            throw new IllegalArgumentException("Malformed task record");
+        }
         Task task;
         switch (details[0]) {
         case "T":
+            requireFieldCount(details, 3);
             task = new Todo(details[2]);
             break;
         case "D":
+            requireFieldCount(details, 4);
             task = new Deadline(details[2], details[3]);
             break;
         case "E":
+            requireFieldCount(details, 5);
             task = new Event(details[2], details[3], details[4]);
             break;
         default:
@@ -287,6 +314,41 @@ public class PeanutButterCat {
             task.markAsDone();
         }
         return task;
+    }
+
+    private static void requireFieldCount(String[] details, int expected) {
+        if (details.length != expected) {
+            throw new IllegalArgumentException("Malformed task record");
+        }
+    }
+
+    /** Splits a record without treating escaped pipe characters as delimiters. */
+    private static String[] splitStorageRecord(String record) {
+        List<String> fields = new ArrayList<>();
+        StringBuilder field = new StringBuilder();
+        boolean escaped = false;
+        for (int i = 0; i < record.length(); i++) {
+            char current = record.charAt(i);
+            if (escaped) {
+                if (current != '|' && current != '\\') {
+                    throw new IllegalArgumentException("Invalid escape sequence");
+                }
+                field.append(current);
+                escaped = false;
+            } else if (current == '\\') {
+                escaped = true;
+            } else if (current == '|') {
+                fields.add(field.toString().trim());
+                field.setLength(0);
+            } else {
+                field.append(current);
+            }
+        }
+        if (escaped) {
+            throw new IllegalArgumentException("Unterminated escape sequence");
+        }
+        fields.add(field.toString().trim());
+        return fields.toArray(String[]::new);
     }
 
     /**
