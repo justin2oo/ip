@@ -21,7 +21,7 @@ public class PeanutButterCat {
         String banner = " /\\_/\\\n"
                 + "( o.o )  peanutbuttercat\n"
                 + " > u <";
-        List<Task> tasks = new ArrayList<>();
+        List<Task> tasks = loadTasks();
 
         System.out.println(horizontalLine);
         System.out.println(banner);
@@ -236,6 +236,57 @@ public class PeanutButterCat {
         } catch (IOException exception) {
             System.err.println("Unable to save tasks: " + exception.getMessage());
         }
+    }
+
+    /**
+     * Loads the previously saved tasks from the application's fixed storage location.
+     *
+     * @return The saved tasks, or an empty list when no save file exists or cannot be read.
+     */
+    private static List<Task> loadTasks() {
+        List<Task> tasks = new ArrayList<>();
+        if (!Files.exists(SAVE_FILE)) {
+            return tasks;
+        }
+
+        try {
+            for (String taskRecord : Files.readAllLines(SAVE_FILE)) {
+                Task task = createTaskFromRecord(taskRecord);
+                tasks.add(task);
+            }
+        } catch (IOException exception) {
+            System.err.println("Unable to load tasks: " + exception.getMessage());
+        }
+        return tasks;
+    }
+
+    /**
+     * Recreates one task from its pipe-delimited storage record.
+     *
+     * @param taskRecord A task record written by {@link Task#toFileString()}.
+     * @return The recreated task.
+     */
+    private static Task createTaskFromRecord(String taskRecord) {
+        String[] details = taskRecord.split(" \\| ", -1);
+        Task task;
+        switch (details[0]) {
+        case "T":
+            task = new Todo(details[2]);
+            break;
+        case "D":
+            task = new Deadline(details[2], details[3]);
+            break;
+        case "E":
+            task = new Event(details[2], details[3], details[4]);
+            break;
+        default:
+            throw new IllegalArgumentException("Unknown task type in saved data: " + details[0]);
+        }
+
+        if (details[1].equals("1")) {
+            task.markAsDone();
+        }
+        return task;
     }
 
     /**
