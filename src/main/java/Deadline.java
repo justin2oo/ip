@@ -12,11 +12,17 @@ public class Deadline extends Task {
      */
     public Deadline(String description, String by) {
         super(description);
-        this.by = by;
+        this.by = requireNonBlank(by, "due time");
     }
 
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + by + ")";
+    }
+
+    @Override
+    public String toFileString() {
+        return "D | " + getCompletionState() + " | " + escapeStorageField(getDescription())
+                + " | " + escapeStorageField(by);
     }
 }

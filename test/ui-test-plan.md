@@ -6,7 +6,7 @@
 - Source directory: `src/main/java`
 - Required Java major version: `25`
 - Capacity: The task list grows dynamically and has no fixed 100-task limit.
-- Isolation: Each test case starts a fresh application process. Inputs within a test case run in order in the same process.
+- Isolation: Each test case starts a fresh application process. Inputs within a test case run in order in the same process. Because tasks now persist, start each case with no `data/duke.txt` file unless the case explicitly tests loading.
 - Comparison: Output must match exactly after normalizing CRLF/LF line endings and ignoring one final line terminator.
 
 ## Test case: Exit the application
@@ -32,7 +32,7 @@ ____________________________________________________________
 ```
 
 ## Test case: Add and manage all task types
-**Aim:** Verify that todos, deadlines, and events retain their type-specific details as strings and can be marked, unmarked, and listed.
+**Aim:** Verify that todos, deadlines, and events retain their type-specific details as strings, are saved after each change, and can be marked, unmarked, and listed.
 
 ### Inputs
 ```text
@@ -463,6 +463,39 @@ delete 0
 delete 5
 list
 bye
+```
+
+## Test case: Accept harmless surrounding whitespace
+**Aim:** Verify that leading and trailing whitespace does not turn an otherwise valid command into an error.
+
+### Inputs
+```text
+  todo spaced task  
+list   
+bye
+```
+
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What pawsome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Purr-fect! I've added this task to my cat basket:
+[T][ ] spaced task
+My cat basket now holds 1 task.
+____________________________________________________________
+____________________________________________________________
+Here are the tasks in my cat basket:
+1.[T][ ] spaced task
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
 ```
 
 ### Expected output

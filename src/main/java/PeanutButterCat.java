@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -6,6 +10,9 @@ import java.util.Scanner;
  * Starts the peanutbuttercat chatbot.
  */
 public class PeanutButterCat {
+    /** Relative, OS-independent location used for the application's saved tasks. */
+    private static final Path SAVE_FILE = Path.of("data", "duke.txt");
+
     /**
      * Runs the chatbot and responds to commands read from standard input.
      *
@@ -16,7 +23,7 @@ public class PeanutButterCat {
         String banner = " /\\_/\\\n"
                 + "( o.o )  peanutbuttercat\n"
                 + " > u <";
-        List<Task> tasks = new ArrayList<>();
+        List<Task> tasks = loadTasks();
 
         System.out.println(horizontalLine);
         System.out.println(banner);
@@ -26,7 +33,7 @@ public class PeanutButterCat {
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
-            String command = scanner.nextLine();
+            String command = scanner.nextLine().trim();
             CommandType commandType = CommandType.fromInput(command);
 
             System.out.println(horizontalLine);
@@ -51,24 +58,28 @@ public class PeanutButterCat {
                 case DELETE:
                     int taskIndex = parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
                     Task removedTask = tasks.remove(taskIndex);
+                    saveTasks(tasks);
                     printTaskDeleted(removedTask, tasks.size());
                     break;
                 case TODO:
                     String description = getDescription(command, commandType.getCommandWord());
                     Task todo = new Todo(description);
                     tasks.add(todo);
+                    saveTasks(tasks);
                     printTaskAdded(todo, tasks.size());
                     break;
                 case DEADLINE:
                     String[] deadlineDetails = parseDeadline(command);
                     Task deadline = new Deadline(deadlineDetails[0], deadlineDetails[1]);
                     tasks.add(deadline);
+                    saveTasks(tasks);
                     printTaskAdded(deadline, tasks.size());
                     break;
                 case EVENT:
                     String[] eventDetails = parseEvent(command);
                     Task event = new Event(eventDetails[0], eventDetails[1], eventDetails[2]);
                     tasks.add(event);
+                    saveTasks(tasks);
                     printTaskAdded(event, tasks.size());
                     break;
                 case BYE, UNKNOWN:
@@ -207,6 +218,137 @@ public class PeanutButterCat {
             System.out.println("No paw-blem! I've marked this task as not done yet:");
         }
         System.out.println("  " + task);
+        saveTasks(tasks);
+    }
+
+    /**
+     * Saves the current task list to the application's fixed storage location.
+     *
+     * @param tasks List containing the tasks to save.
+     */
+    private static void saveTasks(List<Task> tasks) {
+        List<String> taskRecords = new ArrayList<>();
+        for (Task task : tasks) {
+            taskRecords.add(task.toFileString());
+        }
+
+        try {
+            Files.createDirectories(SAVE_FILE.getParent());
+            Path temporaryFile = Files.createTempFile(SAVE_FILE.getParent(), "duke", ".tmp");
+            try {
+                Files.write(temporaryFile, taskRecords);
+                try {
+                    Files.move(temporaryFile, SAVE_FILE, StandardCopyOption.REPLACE_EXISTING,
+                            StandardCopyOption.ATOMIC_MOVE);
+                } catch (java.nio.file.AtomicMoveNotSupportedException exception) {
+                    Files.move(temporaryFile, SAVE_FILE, StandardCopyOption.REPLACE_EXISTING);
+                }
+            } finally {
+                Files.deleteIfExists(temporaryFile);
+            }
+        } catch (IOException | SecurityException exception) {
+            System.err.println("Unable to save tasks: " + exception.getMessage());
+        }
+    }
+
+    /**
+     * Loads the previously saved tasks from the application's fixed storage location.
+     *
+     * @return The saved tasks, or an empty list when no save file exists or cannot be read.
+     */
+    private static List<Task> loadTasks() {
+        List<Task> tasks = new ArrayList<>();
+        try {
+            if (!Files.exists(SAVE_FILE)) {
+                return tasks;
+            }
+            int lineNumber = 0;
+            for (String taskRecord : Files.readAllLines(SAVE_FILE)) {
+                lineNumber++;
+                if (taskRecord.isBlank()) {
+                    continue;
+                }
+                try {
+                    tasks.add(createTaskFromRecord(taskRecord));
+                } catch (IllegalArgumentException exception) {
+                    System.err.println("Ignoring invalid task record at line " + lineNumber + ".");
+                }
+            }
+        } catch (IOException | SecurityException exception) {
+            System.err.println("Unable to load tasks: " + exception.getMessage());
+        }
+        return tasks;
+    }
+
+    /**
+     * Recreates one task from its pipe-delimited storage record.
+     *
+     * @param taskRecord A task record written by {@link Task#toFileString()}.
+     * @return The recreated task.
+     */
+    private static Task createTaskFromRecord(String taskRecord) {
+        String[] details = splitStorageRecord(taskRecord);
+        if (details.length < 3 || details.length > 5
+                || (!details[1].equals("0") && !details[1].equals("1"))) {
+            throw new IllegalArgumentException("Malformed task record");
+        }
+        Task task;
+        switch (details[0]) {
+        case "T":
+            requireFieldCount(details, 3);
+            task = new Todo(details[2]);
+            break;
+        case "D":
+            requireFieldCount(details, 4);
+            task = new Deadline(details[2], details[3]);
+            break;
+        case "E":
+            requireFieldCount(details, 5);
+            task = new Event(details[2], details[3], details[4]);
+            break;
+        default:
+            throw new IllegalArgumentException("Unknown task type in saved data: " + details[0]);
+        }
+
+        if (details[1].equals("1")) {
+            task.markAsDone();
+        }
+        return task;
+    }
+
+    private static void requireFieldCount(String[] details, int expected) {
+        if (details.length != expected) {
+            throw new IllegalArgumentException("Malformed task record");
+        }
+    }
+
+    /** Splits a record without treating escaped pipe characters as delimiters. */
+    private static String[] splitStorageRecord(String record) {
+        List<String> fields = new ArrayList<>();
+        StringBuilder field = new StringBuilder();
+        boolean escaped = false;
+        for (int i = 0; i < record.length(); i++) {
+            char current = record.charAt(i);
+            if (escaped) {
+                if (current != '|' && current != '\\') {
+                    throw new IllegalArgumentException("Invalid escape sequence");
+                }
+                field.append(current);
+                escaped = false;
+            } else if (current == '\\') {
+                escaped = true;
+            } else if (current == '|') {
+                fields.add(field.toString().trim());
+                field.setLength(0);
+            } else {
+                field.append(current);
+            }
+        }
+        if (escaped) {
+            throw new IllegalArgumentException("Unterminated escape sequence");
+        }
+        fields.add(field.toString().trim());
+        return fields.toArray(String[]::new);
     }
 
     /**

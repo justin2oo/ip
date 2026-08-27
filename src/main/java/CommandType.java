@@ -33,6 +33,9 @@ public enum CommandType {
      * @return The matching command type, or {@link #UNKNOWN} if there is no match.
      */
     public static CommandType fromInput(String input) {
+        if (input == null) {
+            return UNKNOWN;
+        }
         for (CommandType commandType : values()) {
             if (commandType.matches(input)) {
                 return commandType;
@@ -54,7 +57,10 @@ public enum CommandType {
         if (this == UNKNOWN) {
             return false;
         }
-        return input.equals(commandWord)
-                || acceptsArguments && input.startsWith(commandWord + " ");
+        String trimmedInput = input.trim();
+        return trimmedInput.equals(commandWord)
+                || acceptsArguments && trimmedInput.startsWith(commandWord)
+                && trimmedInput.length() > commandWord.length()
+                && Character.isWhitespace(trimmedInput.charAt(commandWord.length()));
     }
 }

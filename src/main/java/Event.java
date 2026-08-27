@@ -14,13 +14,19 @@ public class Event extends Task {
      */
     public Event(String description, String from, String to) {
         super(description);
-        this.from = from;
-        this.to = to;
+        this.from = requireNonBlank(from, "event start time");
+        this.to = requireNonBlank(to, "event end time");
     }
 
     @Override
     public String toString() {
         return "[E]" + super.toString()
                 + " (from: " + from + " to: " + to + ")";
+    }
+
+    @Override
+    public String toFileString() {
+        return "E | " + getCompletionState() + " | " + escapeStorageField(getDescription())
+                + " | " + escapeStorageField(from) + " | " + escapeStorageField(to);
     }
 }

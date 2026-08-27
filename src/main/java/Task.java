@@ -11,8 +11,27 @@ public class Task {
      * @param description Description of the task.
      */
     public Task(String description) {
-        this.description = description;
+        this.description = requireNonBlank(description, "description");
         this.isDone = false;
+    }
+
+    /**
+     * Validates a required text field shared by all task types.
+     *
+     * @param value Value to validate.
+     * @param fieldName Name used in the exception message.
+     * @return The original value with surrounding whitespace removed.
+     */
+    protected static String requireNonBlank(String value, String fieldName) {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("Task " + fieldName + " cannot be blank.");
+        }
+        return value.trim();
+    }
+
+    /** Escapes storage delimiters while keeping the legacy file format readable. */
+    protected static String escapeStorageField(String value) {
+        return value.replace("\\", "\\\\").replace("|", "\\|");
     }
 
     /**
@@ -27,6 +46,33 @@ public class Task {
      */
     public void markAsNotDone() {
         isDone = false;
+    }
+
+    /**
+     * Returns this task in the format used by the on-disk task list.
+     *
+     * @return A pipe-delimited task record.
+     */
+    public String toFileString() {
+        return "T | " + getCompletionState() + " | " + escapeStorageField(description);
+    }
+
+    /**
+     * Returns this task's completion state in the storage format.
+     *
+     * @return {@code 1} when the task is done, otherwise {@code 0}.
+     */
+    protected String getCompletionState() {
+        return isDone ? "1" : "0";
+    }
+
+    /**
+     * Returns the task description for subclasses that format storage records.
+     *
+     * @return This task's description.
+     */
+    protected String getDescription() {
+        return description;
     }
 
     private String getStatusIcon() {
