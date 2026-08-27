@@ -21,21 +21,6 @@ public class Parser {
         return CommandType.fromInput(input);
     }
 
-    /**
-     * Creates command objects for the command cases already extracted from the main loop.
-     *
-     * @param input Full command entered by the user.
-     * @return The corresponding command, or {@code null} while a command is still handled by
-     *         the transition switch in the application coordinator.
-     */
-    public Command parse(String input) {
-        return switch (parseCommandType(input)) {
-        case BYE -> new ExitCommand();
-        case LIST -> new ListCommand();
-        default -> null;
-        };
-    }
-
     /** Extracts a non-empty description after a command word. */
     public String getDescription(String command, String commandWord) throws PeanutButterCatException {
         String description = command.substring(commandWord.length()).trim();
