@@ -10,6 +10,7 @@ import java.util.Scanner;
  * Starts the peanutbuttercat chatbot.
  */
 public class PeanutButterCat {
+    /** Relative, OS-independent location used for the application's saved tasks. */
     private static final Path SAVE_FILE = Path.of("data", "duke.txt");
 
     /**
@@ -257,11 +258,10 @@ public class PeanutButterCat {
      */
     private static List<Task> loadTasks() {
         List<Task> tasks = new ArrayList<>();
-        if (!Files.exists(SAVE_FILE)) {
-            return tasks;
-        }
-
         try {
+            if (!Files.exists(SAVE_FILE)) {
+                return tasks;
+            }
             int lineNumber = 0;
             for (String taskRecord : Files.readAllLines(SAVE_FILE)) {
                 lineNumber++;
