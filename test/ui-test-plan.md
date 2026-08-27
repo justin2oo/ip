@@ -32,7 +32,7 @@ ____________________________________________________________
 ```
 
 ## Test case: Add and manage all task types
-**Aim:** Verify that todos, deadlines, and events retain their type-specific details as strings and can be marked, unmarked, and listed.
+**Aim:** Verify that todos, deadlines, and events retain their type-specific details as strings, are saved after each change, and can be marked, unmarked, and listed.
 
 ### Inputs
 ```text

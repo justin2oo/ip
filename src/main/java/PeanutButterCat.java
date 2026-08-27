@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -6,6 +9,8 @@ import java.util.Scanner;
  * Starts the peanutbuttercat chatbot.
  */
 public class PeanutButterCat {
+    private static final Path SAVE_FILE = Path.of("data", "duke.txt");
+
     /**
      * Runs the chatbot and responds to commands read from standard input.
      *
@@ -51,24 +56,28 @@ public class PeanutButterCat {
                 case DELETE:
                     int taskIndex = parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
                     Task removedTask = tasks.remove(taskIndex);
+                    saveTasks(tasks);
                     printTaskDeleted(removedTask, tasks.size());
                     break;
                 case TODO:
                     String description = getDescription(command, commandType.getCommandWord());
                     Task todo = new Todo(description);
                     tasks.add(todo);
+                    saveTasks(tasks);
                     printTaskAdded(todo, tasks.size());
                     break;
                 case DEADLINE:
                     String[] deadlineDetails = parseDeadline(command);
                     Task deadline = new Deadline(deadlineDetails[0], deadlineDetails[1]);
                     tasks.add(deadline);
+                    saveTasks(tasks);
                     printTaskAdded(deadline, tasks.size());
                     break;
                 case EVENT:
                     String[] eventDetails = parseEvent(command);
                     Task event = new Event(eventDetails[0], eventDetails[1], eventDetails[2]);
                     tasks.add(event);
+                    saveTasks(tasks);
                     printTaskAdded(event, tasks.size());
                     break;
                 case BYE, UNKNOWN:
@@ -207,6 +216,26 @@ public class PeanutButterCat {
             System.out.println("No paw-blem! I've marked this task as not done yet:");
         }
         System.out.println("  " + task);
+        saveTasks(tasks);
+    }
+
+    /**
+     * Saves the current task list to the application's fixed storage location.
+     *
+     * @param tasks List containing the tasks to save.
+     */
+    private static void saveTasks(List<Task> tasks) {
+        List<String> taskRecords = new ArrayList<>();
+        for (Task task : tasks) {
+            taskRecords.add(task.toFileString());
+        }
+
+        try {
+            Files.createDirectories(SAVE_FILE.getParent());
+            Files.write(SAVE_FILE, taskRecords);
+        } catch (IOException exception) {
+            System.err.println("Unable to save tasks: " + exception.getMessage());
+        }
     }
 
     /**

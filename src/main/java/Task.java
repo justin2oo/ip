@@ -29,6 +29,33 @@ public class Task {
         isDone = false;
     }
 
+    /**
+     * Returns this task in the format used by the on-disk task list.
+     *
+     * @return A pipe-delimited task record.
+     */
+    public String toFileString() {
+        return "T | " + getCompletionState() + " | " + description;
+    }
+
+    /**
+     * Returns this task's completion state in the storage format.
+     *
+     * @return {@code 1} when the task is done, otherwise {@code 0}.
+     */
+    protected String getCompletionState() {
+        return isDone ? "1" : "0";
+    }
+
+    /**
+     * Returns the task description for subclasses that format storage records.
+     *
+     * @return This task's description.
+     */
+    protected String getDescription() {
+        return description;
+    }
+
     private String getStatusIcon() {
         return isDone ? "X" : " ";
     }
