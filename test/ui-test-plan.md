@@ -11,12 +11,10 @@
 
 ## Test case: Exit the application
 **Aim:** Verify that `bye` prints the farewell and exits cleanly.
-
 ### Inputs
 ```text
 bye
 ```
-
 ### Expected output
 ```text
 ____________________________________________________________
@@ -33,7 +31,6 @@ ____________________________________________________________
 
 ## Test case: Parse, format, save, and query dates
 **Aim:** Verify that slash and ISO date/time inputs become typed calendar values, display readably, persist, and can be queried by date.
-
 ### Inputs
 ```text
 deadline return book /by 2/12/2019 1800
@@ -42,7 +39,6 @@ on 2019-12-02
 list
 bye
 ```
-
 ### Expected output
 ```text
 ____________________________________________________________
@@ -79,7 +75,6 @@ ____________________________________________________________
 
 ## Test case: Reject invalid dates and continue
 **Aim:** Verify that malformed dates are rejected without adding tasks.
-
 ### Inputs
 ```text
 deadline invalid /by no idea
@@ -88,7 +83,6 @@ todo recover gracefully
 list
 bye
 ```
-
 ### Expected output
 ```text
 ____________________________________________________________

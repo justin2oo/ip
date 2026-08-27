@@ -36,7 +36,7 @@ public class PeanutButterCat {
         String banner = " /\\_/\\\n"
                 + "( o.o )  peanutbuttercat\n"
                 + " > u <";
-        List<Task> tasks = loadTasks();
+        TaskList tasks = new TaskList(loadTasks());
 
         System.out.println(horizontalLine);
         System.out.println(banner);
@@ -254,7 +254,7 @@ public class PeanutButterCat {
      * @throws PeanutButterCatException If the task number is invalid.
      */
     private static void updateTaskStatus(String command, CommandType commandType,
-            List<Task> tasks, boolean isDone) throws PeanutButterCatException {
+            TaskList tasks, boolean isDone) throws PeanutButterCatException {
         int taskIndex = parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
         Task task = tasks.get(taskIndex);
         if (isDone) {
@@ -273,9 +273,9 @@ public class PeanutButterCat {
      *
      * @param tasks List containing the tasks to save.
      */
-    private static void saveTasks(List<Task> tasks) {
+    private static void saveTasks(TaskList tasks) {
         List<String> taskRecords = new ArrayList<>();
-        for (Task task : tasks) {
+        for (Task task : tasks.asList()) {
             taskRecords.add(task.toFileString());
         }
 
@@ -403,7 +403,7 @@ public class PeanutButterCat {
      *
      * @param tasks List containing the stored tasks.
      */
-    private static void printTaskList(List<Task> tasks) {
+    private static void printTaskList(TaskList tasks) {
         System.out.println("Here are the tasks in my cat basket:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
@@ -418,7 +418,7 @@ public class PeanutButterCat {
         }
     }
 
-    private static void printTasksOnDate(LocalDate date, List<Task> tasks) {
+    private static void printTasksOnDate(LocalDate date, TaskList tasks) {
         System.out.println("Here are the tasks on " + date.format(DISPLAY_DATE) + ":");
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
