@@ -26,16 +26,36 @@ public class Event extends Task {
         this.to = to;
     }
 
+    /**
+     * Returns the date and time at which this event starts.
+     *
+     * @return This event's start date and time.
+     */
     public LocalDateTime getFrom() { return from; }
 
+    /**
+     * Returns the date and time at which this event ends.
+     *
+     * @return This event's end date and time.
+     */
     public LocalDateTime getTo() { return to; }
 
+    /**
+     * Returns the event in the format shown to users.
+     *
+     * @return A display string containing the task status, description, and time range.
+     */
     @Override
     public String toString() {
         return "[E]" + super.toString()
                 + " (from: " + from.format(OUTPUT_FORMAT) + " to: " + to.format(OUTPUT_FORMAT) + ")";
     }
 
+    /**
+     * Returns the event in the format used by the storage file.
+     *
+     * @return A pipe-delimited event record.
+     */
     @Override
     public String toFileString() {
         return "E | " + getCompletionState() + " | " + escapeStorageField(getDescription())
