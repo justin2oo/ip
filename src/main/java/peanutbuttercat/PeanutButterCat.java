@@ -36,6 +36,10 @@ public class PeanutButterCat {
                 case LIST:
                     UI.showTaskList(tasks);
                     break;
+                case FIND:
+                    String keyword = PARSER.getDescription(command, commandType.getCommandWord());
+                    UI.showMatchingTasks(tasks.findByDescription(keyword));
+                    break;
                 case MARK:
                     updateTaskStatus(command, commandType, tasks, true);
                     break;

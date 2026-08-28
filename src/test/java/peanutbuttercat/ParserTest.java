@@ -16,6 +16,7 @@ class ParserTest {
     @Test
     void parseCommandType_knownCommand_returnsMatchingType() {
         assertEquals(CommandType.TODO, parser.parseCommandType("todo buy milk"));
+        assertEquals(CommandType.FIND, parser.parseCommandType("find milk"));
         assertEquals(CommandType.BYE, parser.parseCommandType("  bye  "));
     }
 
