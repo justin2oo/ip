@@ -24,6 +24,11 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 # Project-specific requirements
 
+## Project coding and Git standards
+
+* Apply the project skill `$seedu-java-coding-standard` to every Java code change. This skill is based on the SE-EDU Java basic and intermediate coding standard and its linked fallback style guide.
+* Apply the project skill `$seedu-git-standard` when preparing every future commit. Do not commit or push unless explicitly asked.
+
 ## Java version:
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
