@@ -29,6 +29,55 @@ Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut bu
 ____________________________________________________________
 ```
 
+## Test case: Find tasks by description keyword
+**Aim:** Verify that `find` returns tasks whose descriptions contain a case-insensitive keyword.
+### Inputs
+```text
+todo read book
+deadline return book /by 06/06/2026 1800
+todo buy groceries
+find BOOK
+find travel
+bye
+```
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What pawsome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Purr-fect! I've added this task to my cat basket:
+[T][ ] read book
+My cat basket now holds 1 task.
+____________________________________________________________
+____________________________________________________________
+Purr-fect! I've added this task to my cat basket:
+[D][ ] return book (by: Jun 06 2026 6:00 pm)
+My cat basket now holds 2 tasks.
+____________________________________________________________
+____________________________________________________________
+Purr-fect! I've added this task to my cat basket:
+[T][ ] buy groceries
+My cat basket now holds 3 tasks.
+____________________________________________________________
+____________________________________________________________
+Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[D][ ] return book (by: Jun 06 2026 6:00 pm)
+____________________________________________________________
+____________________________________________________________
+Here are the matching tasks in your list:
+No matching tasks found.
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```
+
 ## Test case: Parse, format, save, and query dates
 **Aim:** Verify that slash and ISO date/time inputs become typed calendar values, display readably, persist, and can be queried by date.
 ### Inputs

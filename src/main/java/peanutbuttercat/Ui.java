@@ -2,6 +2,7 @@ package peanutbuttercat;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * Handles all console input/output presentation for the chatbot.
@@ -43,6 +44,18 @@ public class Ui {
         System.out.println("Here are the tasks in my cat basket:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    /** Displays tasks whose descriptions contain the searched keyword. */
+    public void showMatchingTasks(List<Task> matchingTasks) {
+        System.out.println("Here are the matching tasks in your list:");
+        if (matchingTasks.isEmpty()) {
+            System.out.println("No matching tasks found.");
+            return;
+        }
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            System.out.println((i + 1) + "." + matchingTasks.get(i));
         }
     }
 
