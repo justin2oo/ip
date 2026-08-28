@@ -23,15 +23,30 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    /**
+     * Returns the date and time by which this deadline should be completed.
+     *
+     * @return This deadline's due date and time.
+     */
     public LocalDateTime getBy() {
         return by;
     }
 
+    /**
+     * Returns the deadline in the format shown to users.
+     *
+     * @return A display string containing the task status, description, and due time.
+     */
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + by.format(OUTPUT_FORMAT) + ")";
     }
 
+    /**
+     * Returns the deadline in the format used by the storage file.
+     *
+     * @return A pipe-delimited deadline record.
+     */
     @Override
     public String toFileString() {
         return "D | " + getCompletionState() + " | " + escapeStorageField(getDescription())
