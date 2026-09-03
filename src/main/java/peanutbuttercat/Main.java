@@ -1,20 +1,32 @@
 package peanutbuttercat;
 
+import java.io.IOException;
+
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 /**
- * Displays the first JavaFX window for PeanutButterCat.
+ * Creates and displays the JavaFX window for PeanutButterCat.
  */
 public class Main extends Application {
+    private final PeanutButterCat peanutButterCat = new PeanutButterCat();
 
     @Override
     public void start(Stage stage) {
-        Label helloWorld = new Label("Hello World!");
-        Scene scene = new Scene(helloWorld);
-        stage.setScene(scene);
-        stage.show();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
+            AnchorPane mainWindow = fxmlLoader.load();
+            Scene scene = new Scene(mainWindow);
+            stage.setScene(scene);
+            stage.setMinHeight(220);
+            stage.setMinWidth(417);
+            fxmlLoader.<MainWindow>getController().setPeanutButterCat(peanutButterCat);
+            stage.show();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 }
