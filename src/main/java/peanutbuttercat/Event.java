@@ -31,14 +31,18 @@ public class Event extends Task {
      *
      * @return This event's start date and time.
      */
-    public LocalDateTime getFrom() { return from; }
+    public LocalDateTime getFrom() {
+        return from;
+    }
 
     /**
      * Returns the date and time at which this event ends.
      *
      * @return This event's end date and time.
      */
-    public LocalDateTime getTo() { return to; }
+    public LocalDateTime getTo() {
+        return to;
+    }
 
     /**
      * Returns the event in the format shown to users.

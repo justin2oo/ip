@@ -87,20 +87,20 @@ public class Storage {
         }
         Task task;
         switch (details[0]) {
-        case "T":
-            requireFieldCount(details, 3);
-            task = new Todo(details[2]);
-            break;
-        case "D":
-            requireFieldCount(details, 4);
-            task = new Deadline(details[2], parseStoredDateTime(details[3]));
-            break;
-        case "E":
-            requireFieldCount(details, 5);
-            task = new Event(details[2], parseStoredDateTime(details[3]), parseStoredDateTime(details[4]));
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown task type in saved data: " + details[0]);
+            case "T":
+                requireFieldCount(details, 3);
+                task = new Todo(details[2]);
+                break;
+            case "D":
+                requireFieldCount(details, 4);
+                task = new Deadline(details[2], parseStoredDateTime(details[3]));
+                break;
+            case "E":
+                requireFieldCount(details, 5);
+                task = new Event(details[2], parseStoredDateTime(details[3]), parseStoredDateTime(details[4]));
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown task type in saved data: " + details[0]);
         }
 
         if (details[1].equals("1")) {

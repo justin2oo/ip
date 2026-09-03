@@ -33,8 +33,8 @@ class ParserTest {
 
     @Test
     void getDescription_commandWithoutText_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.getDescription("todo   ", "todo"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.getDescription("todo   ", "todo"));
     }
 
     @Test
@@ -45,26 +45,26 @@ class ParserTest {
 
     @Test
     void parseDeadline_missingByMarker_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseDeadline("deadline submit report"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDeadline("deadline submit report"));
     }
 
     @Test
     void parseDeadline_missingDescription_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseDeadline("deadline /by 2/12/2019 1800"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDeadline("deadline /by 2/12/2019 1800"));
     }
 
     @Test
     void parseDeadline_missingDueTime_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseDeadline("deadline submit report /by"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDeadline("deadline submit report /by"));
     }
 
     @Test
     void parseDeadline_invalidDueTime_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseDeadline("deadline submit report /by not-a-date"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDeadline("deadline submit report /by not-a-date"));
     }
 
     @Test
@@ -75,32 +75,32 @@ class ParserTest {
 
     @Test
     void parseEvent_missingFromOrToMarker_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseEvent("event team meeting /from 2019-12-02 1900"));
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseEvent("event team meeting /to 2019-12-02 2000"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseEvent("event team meeting /from 2019-12-02 1900"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseEvent("event team meeting /to 2019-12-02 2000"));
     }
 
     @Test
     void parseEvent_missingDescription_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseEvent("event /from 2019-12-02 1900 /to 2019-12-02 2000"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseEvent("event /from 2019-12-02 1900 /to 2019-12-02 2000"));
     }
 
     @Test
     void parseEvent_missingStartOrEndTime_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseEvent("event team meeting /from /to 2019-12-02 2000"));
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseEvent("event team meeting /from 2019-12-02 1900 /to"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseEvent("event team meeting /from /to 2019-12-02 2000"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseEvent("event team meeting /from 2019-12-02 1900 /to"));
     }
 
     @Test
     void parseEvent_invalidStartOrEndTime_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseEvent("event team meeting /from not-a-date /to 2019-12-02 2000"));
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseEvent("event team meeting /from 2019-12-02 1900 /to not-a-date"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseEvent("event team meeting /from not-a-date /to 2019-12-02 2000"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseEvent("event team meeting /from 2019-12-02 1900 /to not-a-date"));
     }
 
     @Test
@@ -116,8 +116,8 @@ class ParserTest {
 
     @Test
     void parseDateTime_unsupportedFormat_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseDateTime("12/02/2019"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDateTime("12/02/2019"));
     }
 
     @Test
@@ -132,8 +132,8 @@ class ParserTest {
 
     @Test
     void parseDate_invalidDate_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseDate("on not-a-date"));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDate("on not-a-date"));
     }
 
     @Test
@@ -148,37 +148,37 @@ class ParserTest {
 
     @Test
     void parseTaskIndex_missingNumber_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseTaskIndex("done", "done", 3));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseTaskIndex("done", "done", 3));
     }
 
     @Test
     void parseTaskIndex_nonNumericNumber_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseTaskIndex("done two", "done", 3));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseTaskIndex("done two", "done", 3));
     }
 
     @Test
     void parseTaskIndex_zeroNumber_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseTaskIndex("done 0", "done", 3));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseTaskIndex("done 0", "done", 3));
     }
 
     @Test
     void parseTaskIndex_negativeNumber_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseTaskIndex("done -1", "done", 3));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseTaskIndex("done -1", "done", 3));
     }
 
     @Test
     void parseTaskIndex_numberAboveTaskCount_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseTaskIndex("done 4", "done", 3));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseTaskIndex("done 4", "done", 3));
     }
 
     @Test
     void parseTaskIndex_anyNumberWithEmptyTaskList_exceptionThrown() {
-        assertThrows(PeanutButterCatException.class,
-                () -> parser.parseTaskIndex("done 1", "done", 0));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseTaskIndex("done 1", "done", 0));
     }
 }
