@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: #fff8ed;
+    -fx-background-color: linear-gradient(to bottom right, #ff8700 0%, #ffb84d 45%, #76cdf0 73%, #2389d7 100%);
 }
 
 .text-field {
@@ -26,9 +26,12 @@
     -fx-background-color: #814927;
 }
 
-.scroll-pane,
-.scroll-pane .viewport {
+.scroll-pane {
     -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: rgba(255, 252, 247, 0.18);
 }
 
 .scroll-bar .thumb {
