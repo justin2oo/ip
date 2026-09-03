@@ -2,7 +2,7 @@
 
 ## Project configuration
 
-- Main class: `peanutbuttercat.Launcher`
+- Main class: `peanutbuttercat.PeanutButterCat`
 - Source directory: `src/main/java`
 - Required Java major version: `25`
 - Capacity: The task list grows dynamically and has no fixed 100-task limit.
