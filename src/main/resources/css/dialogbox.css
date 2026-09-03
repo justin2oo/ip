@@ -1,0 +1,18 @@
+.dialog-label {
+    -fx-background-color: #f6d4b3;
+    -fx-background-radius: 1em 1em 0 1em;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-text-fill: #3d291d;
+}
+
+.reply-label {
+    -fx-background-color: #fffdf9;
+    -fx-background-radius: 1em 1em 1em 0;
+    -fx-border-color: #d4a373;
+    -fx-border-radius: 1em 1em 1em 0;
+}
+
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(61, 41, 29, 0.2), 8, 0.4, 2, 2);
+}
