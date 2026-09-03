@@ -33,54 +33,55 @@ public class PeanutButterCat {
 
             try {
                 switch (commandType) {
-                case LIST:
-                    UI.showTaskList(tasks);
-                    break;
-                case FIND:
-                    String keyword = PARSER.getDescription(command, commandType.getCommandWord());
-                    UI.showMatchingTasks(tasks.findByDescription(keyword));
-                    break;
-                case MARK:
-                    updateTaskStatus(command, commandType, tasks, true);
-                    break;
-                case UNMARK:
-                    updateTaskStatus(command, commandType, tasks, false);
-                    break;
-                case DELETE:
-                    int taskIndex = PARSER.parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
-                    Task removedTask = tasks.remove(taskIndex);
-                    STORAGE.save(tasks);
-                    UI.showTaskDeleted(removedTask, tasks.size());
-                    break;
-                case TODO:
-                    String description = PARSER.getDescription(command, commandType.getCommandWord());
-                    Task todo = new Todo(description);
-                    tasks.add(todo);
-                    STORAGE.save(tasks);
-                    UI.showTaskAdded(todo, tasks.size());
-                    break;
-                case DEADLINE:
-                    String[] deadlineDetails = PARSER.parseDeadline(command);
-                    Task deadline = new Deadline(deadlineDetails[0], PARSER.parseDateTime(deadlineDetails[1]));
-                    tasks.add(deadline);
-                    STORAGE.save(tasks);
-                    UI.showTaskAdded(deadline, tasks.size());
-                    break;
-                case EVENT:
-                    String[] eventDetails = PARSER.parseEvent(command);
-                    Task event = new Event(eventDetails[0], PARSER.parseDateTime(eventDetails[1]),
-                            PARSER.parseDateTime(eventDetails[2]));
-                    tasks.add(event);
-                    STORAGE.save(tasks);
-                    UI.showTaskAdded(event, tasks.size());
-                    break;
-                case ON:
-                    UI.showTasksOnDate(PARSER.parseDate(command), tasks);
-                    break;
-                case BYE, UNKNOWN:
-                    throw new PeanutButterCatException(
-                            "Hiss-terical mix-up! I don't know that command yet. "
-                                    + "Try another one, purr-lease!");
+                    case LIST:
+                        UI.showTaskList(tasks);
+                        break;
+                    case FIND:
+                        String keyword = PARSER.getDescription(command, commandType.getCommandWord());
+                        UI.showMatchingTasks(tasks.findByDescription(keyword));
+                        break;
+                    case MARK:
+                        updateTaskStatus(command, commandType, tasks, true);
+                        break;
+                    case UNMARK:
+                        updateTaskStatus(command, commandType, tasks, false);
+                        break;
+                    case DELETE:
+                        int taskIndex = PARSER.parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
+                        Task removedTask = tasks.remove(taskIndex);
+                        STORAGE.save(tasks);
+                        UI.showTaskDeleted(removedTask, tasks.size());
+                        break;
+                    case TODO:
+                        String description = PARSER.getDescription(command, commandType.getCommandWord());
+                        Task todo = new Todo(description);
+                        tasks.add(todo);
+                        STORAGE.save(tasks);
+                        UI.showTaskAdded(todo, tasks.size());
+                        break;
+                    case DEADLINE:
+                        String[] deadlineDetails = PARSER.parseDeadline(command);
+                        Task deadline = new Deadline(deadlineDetails[0], PARSER.parseDateTime(deadlineDetails[1]));
+                        tasks.add(deadline);
+                        STORAGE.save(tasks);
+                        UI.showTaskAdded(deadline, tasks.size());
+                        break;
+                    case EVENT:
+                        String[] eventDetails = PARSER.parseEvent(command);
+                        Task event = new Event(eventDetails[0], PARSER.parseDateTime(eventDetails[1]),
+                                PARSER.parseDateTime(eventDetails[2]));
+                        tasks.add(event);
+                        STORAGE.save(tasks);
+                        UI.showTaskAdded(event, tasks.size());
+                        break;
+                    case ON:
+                        UI.showTasksOnDate(PARSER.parseDate(command), tasks);
+                        break;
+                    case UNKNOWN:
+                    default:
+                        throw new PeanutButterCatException(
+                                "Hiss-terical mix-up! I don't know that command yet. "
+                                        + "Try another one, purr-lease!");
                 }
             } catch (PeanutButterCatException exception) {
                 UI.showError(exception.getMessage());

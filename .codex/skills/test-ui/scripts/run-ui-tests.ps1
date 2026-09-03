@@ -177,6 +177,9 @@ try {
         $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
         $startInfo.FileName = $java.Source
         $startInfo.Arguments = '-cp "' + $classesDirectory + '" ' + $mainClass
+        $caseDirectory = Join-Path $classesDirectory ("case-" + [guid]::NewGuid().ToString('N'))
+        [System.IO.Directory]::CreateDirectory($caseDirectory) | Out-Null
+        $startInfo.WorkingDirectory = $caseDirectory
         $startInfo.UseShellExecute = $false
         $startInfo.CreateNoWindow = $true
         $startInfo.RedirectStandardInput = $true
