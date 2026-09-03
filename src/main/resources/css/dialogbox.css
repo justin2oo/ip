@@ -1,0 +1,43 @@
+.dialog-label {
+    -fx-background-color: linear-gradient(to bottom right, #fff1e1 0%, #f9d5b5 100%);
+    -fx-background-radius: 1em 1em 0 1em;
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-line-spacing: 2px;
+    -fx-text-fill: #3d291d;
+}
+
+.reply-label {
+    -fx-background-color: linear-gradient(to bottom right, #fffefa 0%, #f8e6cf 100%);
+    -fx-background-radius: 1em 1em 1em 0;
+    -fx-border-color: #ead4bd;
+    -fx-border-radius: 1em 1em 1em 0;
+}
+
+.add-label {
+    -fx-background-color: linear-gradient(to bottom right, #fff5e2 0%, #ffd092 100%);
+}
+
+.status-label {
+    -fx-background-color: linear-gradient(to bottom right, #fff9ed 0%, #f7dfb7 100%);
+}
+
+.delete-label {
+    -fx-background-color: linear-gradient(to bottom right, #fff0e8 0%, #f3bd9e 100%);
+}
+
+.error-label {
+    -fx-background-color: linear-gradient(to bottom right, #ffede5 0%, #edab83 100%);
+}
+
+.query-label {
+    -fx-background-color: linear-gradient(to bottom right, #fffdf9 0%, #f8e2c5 100%);
+}
+
+.farewell-label {
+    -fx-background-color: linear-gradient(to bottom right, #fff3df 0%, #f3c887 100%);
+}
+
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(61, 41, 29, 0.12), 6, 0.35, 1, 1);
+}
