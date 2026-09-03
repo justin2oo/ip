@@ -87,6 +87,16 @@ public class PeanutButterCat {
         }
     }
 
+    /**
+     * Returns the type of command represented by the supplied input.
+     *
+     * @param input Raw command entered by the user.
+     * @return The command type, or {@link CommandType#UNKNOWN} when it is not recognized.
+     */
+    public CommandType getCommandType(String input) {
+        return parser.parseCommandType(input);
+    }
+
     /** Returns whether the supplied input requests that the application exit. */
     public boolean isExitCommand(String input) {
         return parser.parseCommandType(input.trim()) == CommandType.BYE;
@@ -129,7 +139,6 @@ public class PeanutButterCat {
      *
      * @param command Full mark or unmark command entered by the user.
      * @param commandType Type of status-changing command.
-     * @param tasks Task list containing the stored tasks.
      * @param isDone Whether the selected task should be marked as done.
      * @throws PeanutButterCatException If the task number is invalid.
      */

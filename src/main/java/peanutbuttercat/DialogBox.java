@@ -49,6 +49,37 @@ public class DialogBox extends HBox {
         dialog.getStyleClass().add("reply-label");
     }
 
+    /** Applies a soft reply color that reflects the command's purpose. */
+    private void applyCommandStyle(CommandType commandType) {
+        switch (commandType) {
+            case TODO:
+            case DEADLINE:
+            case EVENT:
+                dialog.getStyleClass().add("add-label");
+                break;
+            case MARK:
+            case UNMARK:
+                dialog.getStyleClass().add("status-label");
+                break;
+            case DELETE:
+                dialog.getStyleClass().add("delete-label");
+                break;
+            case UNKNOWN:
+                dialog.getStyleClass().add("error-label");
+                break;
+            case LIST:
+            case FIND:
+            case ON:
+                dialog.getStyleClass().add("query-label");
+                break;
+            case BYE:
+                dialog.getStyleClass().add("farewell-label");
+                break;
+            default:
+                break;
+        }
+    }
+
     /**
      * Creates a dialog box for a message entered by the user.
      *
@@ -70,6 +101,21 @@ public class DialogBox extends HBox {
     public static DialogBox getPeanutButterCatDialog(String text, Image image) {
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
+        return dialogBox;
+    }
+
+    /**
+     * Creates a colored dialog box for a reply from PeanutButterCat.
+     *
+     * @param text The reply text.
+     * @param image The PeanutButterCat avatar.
+     * @param commandType Type of command that produced the reply.
+     * @return A left-aligned, command-colored PeanutButterCat dialog box.
+     */
+    public static DialogBox getPeanutButterCatDialog(String text, Image image, CommandType commandType) {
+        DialogBox dialogBox = new DialogBox(text, image);
+        dialogBox.flip();
+        dialogBox.applyCommandStyle(commandType);
         return dialogBox;
     }
 }

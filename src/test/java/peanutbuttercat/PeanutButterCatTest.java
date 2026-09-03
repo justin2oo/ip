@@ -44,6 +44,14 @@ class PeanutButterCatTest {
         assertFalse(peanutButterCat.isExitCommand("list"));
     }
 
+    @Test
+    void getCommandType_knownAndUnknownInput_returnsMatchingType() {
+        PeanutButterCat peanutButterCat = createChatbot();
+
+        assertEquals(CommandType.TODO, peanutButterCat.getCommandType("todo buy cat food"));
+        assertEquals(CommandType.UNKNOWN, peanutButterCat.getCommandType("sleep"));
+    }
+
     private PeanutButterCat createChatbot() {
         Path saveFile = temporaryDirectory.resolve("data").resolve("tasks.txt");
         return new PeanutButterCat(new Storage(saveFile.toString()), new Parser());

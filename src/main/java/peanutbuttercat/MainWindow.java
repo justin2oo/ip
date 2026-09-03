@@ -55,10 +55,11 @@ public class MainWindow extends AnchorPane {
             return;
         }
 
+        CommandType commandType = peanutButterCat.getCommandType(input);
         String response = peanutButterCat.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getPeanutButterCatDialog(response, peanutButterCatImage));
+                DialogBox.getPeanutButterCatDialog(response, peanutButterCatImage, commandType));
         userInput.clear();
     }
 
