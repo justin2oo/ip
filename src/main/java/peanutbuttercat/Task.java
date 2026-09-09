@@ -1,5 +1,7 @@
 package peanutbuttercat;
 
+import java.time.LocalDate;
+
 /**
  * Represents the shared description and completion state of a task.
  */
@@ -57,6 +59,17 @@ public class Task {
      */
     public String toFileString() {
         return "T | " + getCompletionState() + " | " + escapeStorageField(description);
+    }
+
+    /**
+     * Returns whether this task is scheduled on the supplied date.
+     * Tasks without a schedule do not occur on any date.
+     *
+     * @param date Date to check against the task's schedule.
+     * @return {@code true} if the task occurs on the date, otherwise {@code false}.
+     */
+    public boolean occursOn(LocalDate date) {
+        return false;
     }
 
     /**

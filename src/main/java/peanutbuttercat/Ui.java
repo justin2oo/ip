@@ -90,13 +90,7 @@ public class Ui {
                 .append(date.format(DISPLAY_DATE)).append(':');
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
-            boolean matchesDeadline = task instanceof Deadline deadline
-                    && deadline.getBy().toLocalDate().equals(date);
-            boolean matchesEvent = task instanceof Event event
-                    && !event.getFrom().toLocalDate().isAfter(date)
-                    && !event.getTo().toLocalDate().isBefore(date);
-            boolean matches = matchesDeadline || matchesEvent;
-            if (matches) {
+            if (task.occursOn(date)) {
                 message.append(System.lineSeparator()).append(i + 1).append('.').append(task);
             }
         }

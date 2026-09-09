@@ -1,5 +1,6 @@
 package peanutbuttercat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -42,6 +43,19 @@ public class Event extends Task {
      */
     public LocalDateTime getTo() {
         return to;
+    }
+
+    /**
+     * Returns whether this event's inclusive date range contains the supplied date.
+     *
+     * @param date Date to compare with the event's range.
+     * @return {@code true} if the event includes the date, otherwise {@code false}.
+     */
+    @Override
+    public boolean occursOn(LocalDate date) {
+        boolean isOnOrAfterStart = !date.isBefore(from.toLocalDate());
+        boolean isOnOrBeforeEnd = !date.isAfter(to.toLocalDate());
+        return isOnOrAfterStart && isOnOrBeforeEnd;
     }
 
     /**

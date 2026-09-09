@@ -1,5 +1,6 @@
 package peanutbuttercat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -30,6 +31,17 @@ public class Deadline extends Task {
      */
     public LocalDateTime getBy() {
         return by;
+    }
+
+    /**
+     * Returns whether this deadline is due on the supplied date.
+     *
+     * @param date Date to compare with the deadline's due date.
+     * @return {@code true} if the deadline is due on the date, otherwise {@code false}.
+     */
+    @Override
+    public boolean occursOn(LocalDate date) {
+        return by.toLocalDate().equals(date);
     }
 
     /**
