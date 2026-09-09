@@ -61,7 +61,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toFileString() {
-        return "D | " + getCompletionState() + " | " + escapeStorageField(getDescription())
-                + " | " + by;
+        return appendCompletionDate("D | " + getCompletionState() + " | "
+                + escapeStorageField(getDescription()) + " | " + by);
     }
 }

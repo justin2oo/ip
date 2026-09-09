@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAccessor;
 
 /**
@@ -11,11 +12,11 @@ import java.time.temporal.TemporalAccessor;
  */
 public class Parser {
     private static final DateTimeFormatter[] INPUT_FORMATS = {
-        DateTimeFormatter.ofPattern("d/M/uuuu HHmm"),
-        DateTimeFormatter.ofPattern("d/M/uuuu HH:mm"),
-        DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm"),
-        DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm"),
-        DateTimeFormatter.ofPattern("uuuu-MM-dd")
+        DateTimeFormatter.ofPattern("d/M/uuuu HHmm").withResolverStyle(ResolverStyle.STRICT),
+        DateTimeFormatter.ofPattern("d/M/uuuu HH:mm").withResolverStyle(ResolverStyle.STRICT),
+        DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withResolverStyle(ResolverStyle.STRICT),
+        DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm").withResolverStyle(ResolverStyle.STRICT),
+        DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT)
     };
 
     /** Identifies the command represented by the input. */
@@ -35,6 +36,25 @@ public class Parser {
                     + commandWord + "! Please add one after '" + commandWord + "'.");
         }
         return description;
+    }
+
+    /**
+     * Verifies that a command does not contain arguments after its command word.
+     *
+     * @param command Full command entered by the user.
+     * @param commandWord Command word that starts the input.
+     * @throws PeanutButterCatException If an argument follows the command word.
+     */
+    public void validateNoArguments(String command, String commandWord) throws PeanutButterCatException {
+        assert command != null : "Command to validate must not be null";
+        assert commandWord != null && !commandWord.isBlank() : "Command word must not be blank";
+        assert command.trim().startsWith(commandWord) : "Command must start with its command word";
+
+        String arguments = command.substring(commandWord.length()).trim();
+        if (!arguments.isEmpty()) {
+            throw new PeanutButterCatException(
+                    "My whiskers don't need extra details for statistics! Use: stats");
+        }
     }
 
     /**

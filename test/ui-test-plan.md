@@ -160,3 +160,51 @@ ____________________________________________________________
 Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
 ____________________________________________________________
 ```
+
+## Test case: Show recent completion statistics
+**Aim:** Verify that `stats` counts current completions, reflects unmarking, and rejects arguments.
+### Inputs
+```text
+todo submit report
+mark 1
+stats
+unmark 1
+stats
+stats week
+bye
+```
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  peanutbuttercat
+ > u <
+Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
+What pawsome task can we tackle together?
+____________________________________________________________
+____________________________________________________________
+Purr-fect! I've added this task to my cat basket:
+[T][ ] submit report
+My cat basket now holds 1 task.
+____________________________________________________________
+____________________________________________________________
+Pawsome! I've marked this task as done:
+  [T][X] submit report
+____________________________________________________________
+____________________________________________________________
+Tasks completed in the last 7 calendar days: 1.
+____________________________________________________________
+____________________________________________________________
+No paw-blem! I've marked this task as not done yet:
+  [T][ ] submit report
+____________________________________________________________
+____________________________________________________________
+Tasks completed in the last 7 calendar days: 0.
+____________________________________________________________
+____________________________________________________________
+My whiskers don't need extra details for statistics! Use: stats
+____________________________________________________________
+____________________________________________________________
+Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+____________________________________________________________
+```

@@ -1,5 +1,7 @@
 package peanutbuttercat;
 
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 /**
@@ -13,10 +15,11 @@ public class PeanutButterCat {
     private final Parser parser;
     private final Ui ui;
     private final TaskList tasks;
+    private final Clock clock;
 
     /** Creates the chatbot backed by its default task storage file. */
     public PeanutButterCat() {
-        this(new Storage(DEFAULT_STORAGE_PATH), new Parser());
+        this(new Storage(DEFAULT_STORAGE_PATH), new Parser(), Clock.systemDefaultZone());
     }
 
     /**
@@ -26,10 +29,22 @@ public class PeanutButterCat {
      * @param parser Parser used to interpret commands.
      */
     PeanutButterCat(Storage storage, Parser parser) {
+        this(storage, parser, Clock.systemDefaultZone());
+    }
+
+    /**
+     * Creates the chatbot with collaborators and a clock supplied for deterministic testing.
+     *
+     * @param storage Storage used to load and save tasks.
+     * @param parser Parser used to interpret commands.
+     * @param clock Clock used to obtain completion and statistics dates.
+     */
+    PeanutButterCat(Storage storage, Parser parser, Clock clock) {
         this.storage = storage;
         this.parser = parser;
         this.ui = new Ui();
         this.tasks = new TaskList(storage.load());
+        this.clock = clock;
     }
 
     /**
@@ -79,6 +94,7 @@ public class PeanutButterCat {
                 case DEADLINE -> addDeadline(command);
                 case EVENT -> addEvent(command);
                 case ON -> ui.getTasksOnDateMessage(parser.parseDate(command), tasks);
+                case STATISTICS -> getStatistics(command, commandType);
                 case UNKNOWN -> throw new PeanutButterCatException(
                         "Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!");
             };
@@ -136,6 +152,18 @@ public class PeanutButterCat {
         return ui.getTaskAddedMessage(event, tasks.size());
     }
 
+    private String getStatistics(String command, CommandType commandType) throws PeanutButterCatException {
+        assert commandType == CommandType.STATISTICS
+                : "Statistics handler must receive a statistics command";
+
+        parser.validateNoArguments(command, commandType.getCommandWord());
+        LocalDate endDate = LocalDate.now(clock);
+        LocalDate startDate = endDate.minusDays(6);
+        long completedTaskCount = tasks.countCompletedBetween(startDate, endDate);
+        long unknownDateTaskCount = tasks.countCompletedWithUnknownDate();
+        return ui.getStatisticsMessage(completedTaskCount, unknownDateTaskCount);
+    }
+
     /**
      * Marks or unmarks the task selected by the command.
      *
@@ -153,7 +181,7 @@ public class PeanutButterCat {
         assert taskIndex >= 0 && taskIndex < tasks.size() : "Parsed task index must exist before status update";
         Task task = tasks.get(taskIndex);
         if (isDone) {
-            task.markAsDone();
+            task.markAsDone(LocalDate.now(clock));
         } else {
             task.markAsNotDone();
         }

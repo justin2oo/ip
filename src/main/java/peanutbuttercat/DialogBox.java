@@ -73,6 +73,7 @@ public class DialogBox extends HBox {
             case LIST:
             case FIND:
             case ON:
+            case STATISTICS:
                 dialog.getStyleClass().add("query-label");
                 break;
             case BYE:

@@ -37,6 +37,18 @@ class ParserTest {
     }
 
     @Test
+    void validateNoArguments_commandWithoutArguments_completesNormally()
+            throws PeanutButterCatException {
+        parser.validateNoArguments("stats   ", "stats");
+    }
+
+    @Test
+    void validateNoArguments_commandWithArguments_exceptionThrown() {
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.validateNoArguments("stats week", "stats"));
+    }
+
+    @Test
     void parseDeadline_validInput_returnsDescriptionAndDueTime() throws PeanutButterCatException {
         Deadline deadline = parser.parseDeadline("deadline submit report /by 2/12/2019 1800");
 
@@ -123,6 +135,12 @@ class ParserTest {
     void parseDateTime_unsupportedFormat_exceptionThrown() {
         assertThrows(PeanutButterCatException.class, () ->
                 parser.parseDateTime("12/02/2019"));
+    }
+
+    @Test
+    void parseDateTime_impossibleCalendarDate_exceptionThrown() {
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDateTime("2019-02-30"));
     }
 
     @Test
