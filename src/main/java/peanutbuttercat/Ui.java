@@ -139,6 +139,8 @@ public class Ui {
     }
 
     private String getTaskCountMessage(int taskCount) {
+        assert taskCount >= 0 : "Displayed task count must not be negative";
+
         String taskWord = taskCount == 1 ? "task" : "tasks";
         return "My cat basket now holds " + taskCount + " " + taskWord + ".";
     }

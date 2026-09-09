@@ -34,6 +34,9 @@ public class DialogBox extends HBox {
             exception.printStackTrace();
         }
 
+        assert dialog != null : "FXML must inject the dialog label before use";
+        assert displayPicture != null : "FXML must inject the display picture before use";
+
         dialog.setText(text);
         displayPicture.setImage(image);
     }
