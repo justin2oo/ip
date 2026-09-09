@@ -26,10 +26,9 @@ public class Storage {
      * @param tasks Tasks to save.
      */
     public void save(TaskList tasks) {
-        List<String> taskRecords = new ArrayList<>();
-        for (Task task : tasks.asList()) {
-            taskRecords.add(task.toFileString());
-        }
+        List<String> taskRecords = tasks.asList().stream()
+                .map(Task::toFileString)
+                .toList();
 
         try {
             Files.createDirectories(saveFile.getParent());
