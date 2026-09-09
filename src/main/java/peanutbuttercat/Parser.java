@@ -33,8 +33,14 @@ public class Parser {
         return description;
     }
 
-    /** Parses a deadline description and due time. */
-    public String[] parseDeadline(String command) throws PeanutButterCatException {
+    /**
+     * Parses a deadline command into a deadline task.
+     *
+     * @param command Full deadline command entered by the user.
+     * @return The parsed deadline task.
+     * @throws PeanutButterCatException If the description or due time is missing or invalid.
+     */
+    public Deadline parseDeadline(String command) throws PeanutButterCatException {
         String details = command.substring(CommandType.DEADLINE.getCommandWord().length()).trim();
         int byIndex = details.indexOf("/by");
         if (byIndex < 0) {
@@ -49,12 +55,18 @@ public class Parser {
         if (by.isEmpty()) {
             throw new PeanutButterCatException("When is it due? Add a time after '/by', purr-lease!");
         }
-        parseDateTime(by);
-        return new String[]{description, by};
+        LocalDateTime dueTime = parseDateTime(by);
+        return new Deadline(description, dueTime);
     }
 
-    /** Parses an event description, start time, and end time. */
-    public String[] parseEvent(String command) throws PeanutButterCatException {
+    /**
+     * Parses an event command into an event task.
+     *
+     * @param command Full event command entered by the user.
+     * @return The parsed event task.
+     * @throws PeanutButterCatException If the description or either event time is missing or invalid.
+     */
+    public Event parseEvent(String command) throws PeanutButterCatException {
         String details = command.substring(CommandType.EVENT.getCommandWord().length()).trim();
         int fromIndex = details.indexOf("/from");
         int toIndex = fromIndex < 0 ? -1 : details.indexOf("/to", fromIndex + "/from".length());
@@ -71,9 +83,9 @@ public class Parser {
         if (from.isEmpty() || to.isEmpty()) {
             throw new PeanutButterCatException("An event needs both start and end times - no missing paws!");
         }
-        parseDateTime(from);
-        parseDateTime(to);
-        return new String[]{description, from, to};
+        LocalDateTime startTime = parseDateTime(from);
+        LocalDateTime endTime = parseDateTime(to);
+        return new Event(description, startTime, endTime);
     }
 
     /** Parses a supported date or date-time value. */

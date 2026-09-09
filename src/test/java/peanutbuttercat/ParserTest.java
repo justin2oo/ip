@@ -1,6 +1,5 @@
 package peanutbuttercat;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -39,8 +38,10 @@ class ParserTest {
 
     @Test
     void parseDeadline_validInput_returnsDescriptionAndDueTime() throws PeanutButterCatException {
-        assertArrayEquals(new String[]{"submit report", "2/12/2019 1800"},
-                parser.parseDeadline("deadline submit report /by 2/12/2019 1800"));
+        Deadline deadline = parser.parseDeadline("deadline submit report /by 2/12/2019 1800");
+
+        assertEquals("submit report", deadline.getDescription());
+        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), deadline.getBy());
     }
 
     @Test
@@ -69,8 +70,12 @@ class ParserTest {
 
     @Test
     void parseEvent_validInput_returnsDescriptionAndTimeRange() throws PeanutButterCatException {
-        assertArrayEquals(new String[]{"team meeting", "2019-12-02 1900", "2019-12-02 2000"},
-                parser.parseEvent("event team meeting /from 2019-12-02 1900 /to 2019-12-02 2000"));
+        Event event = parser.parseEvent(
+                "event team meeting /from 2019-12-02 1900 /to 2019-12-02 2000");
+
+        assertEquals("team meeting", event.getDescription());
+        assertEquals(LocalDateTime.of(2019, 12, 2, 19, 0), event.getFrom());
+        assertEquals(LocalDateTime.of(2019, 12, 2, 20, 0), event.getTo());
     }
 
     @Test

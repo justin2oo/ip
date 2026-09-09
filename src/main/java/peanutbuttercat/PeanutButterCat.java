@@ -118,17 +118,14 @@ public class PeanutButterCat {
     }
 
     private String addDeadline(String command) throws PeanutButterCatException {
-        String[] deadlineDetails = parser.parseDeadline(command);
-        Task deadline = new Deadline(deadlineDetails[0], parser.parseDateTime(deadlineDetails[1]));
+        Task deadline = parser.parseDeadline(command);
         tasks.add(deadline);
         storage.save(tasks);
         return ui.getTaskAddedMessage(deadline, tasks.size());
     }
 
     private String addEvent(String command) throws PeanutButterCatException {
-        String[] eventDetails = parser.parseEvent(command);
-        Task event = new Event(eventDetails[0], parser.parseDateTime(eventDetails[1]),
-                parser.parseDateTime(eventDetails[2]));
+        Task event = parser.parseEvent(command);
         tasks.add(event);
         storage.save(tasks);
         return ui.getTaskAddedMessage(event, tasks.size());
