@@ -62,9 +62,11 @@ public enum CommandType {
             return false;
         }
         String trimmedInput = input.trim();
-        return trimmedInput.equals(commandWord)
-                || acceptsArguments && trimmedInput.startsWith(commandWord)
+        boolean isExactMatch = trimmedInput.equals(commandWord);
+        boolean hasArgument = acceptsArguments
+                && trimmedInput.startsWith(commandWord)
                 && trimmedInput.length() > commandWord.length()
                 && Character.isWhitespace(trimmedInput.charAt(commandWord.length()));
+        return isExactMatch || hasArgument;
     }
 }
