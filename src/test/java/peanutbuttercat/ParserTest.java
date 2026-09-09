@@ -186,4 +186,15 @@ class ParserTest {
         assertThrows(PeanutButterCatException.class, () ->
                 parser.parseTaskIndex("done 1", "done", 0));
     }
+
+    @Test
+    void parseTaskIndex_negativeTaskCount_assertionErrorThrown() {
+        assertThrows(AssertionError.class, () ->
+                parser.parseTaskIndex("done 1", "done", -1));
+    }
+
+    @Test
+    void parseDeadline_wrongCommandType_assertionErrorThrown() {
+        assertThrows(AssertionError.class, () -> parser.parseDeadline("todo buy milk"));
+    }
 }
