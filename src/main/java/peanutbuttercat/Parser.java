@@ -25,6 +25,10 @@ public class Parser {
 
     /** Extracts a non-empty description after a command word. */
     public String getDescription(String command, String commandWord) throws PeanutButterCatException {
+        assert command != null : "Command to parse must not be null";
+        assert commandWord != null && !commandWord.isBlank() : "Command word must not be blank";
+        assert command.trim().startsWith(commandWord) : "Command must start with its command word";
+
         String description = command.substring(commandWord.length()).trim();
         if (description.isEmpty()) {
             throw new PeanutButterCatException("Oops, this kitty needs a description for your "
@@ -35,6 +39,9 @@ public class Parser {
 
     /** Parses a deadline description and due time. */
     public String[] parseDeadline(String command) throws PeanutButterCatException {
+        assert parseCommandType(command) == CommandType.DEADLINE
+                : "Deadline parser must receive a deadline command";
+
         String details = command.substring(CommandType.DEADLINE.getCommandWord().length()).trim();
         int byIndex = details.indexOf("/by");
         if (byIndex < 0) {
@@ -55,6 +62,9 @@ public class Parser {
 
     /** Parses an event description, start time, and end time. */
     public String[] parseEvent(String command) throws PeanutButterCatException {
+        assert parseCommandType(command) == CommandType.EVENT
+                : "Event parser must receive an event command";
+
         String details = command.substring(CommandType.EVENT.getCommandWord().length()).trim();
         int fromIndex = details.indexOf("/from");
         int toIndex = fromIndex < 0 ? -1 : details.indexOf("/to", fromIndex + "/from".length());
@@ -94,6 +104,8 @@ public class Parser {
 
     /** Parses the date argument of an {@code on} command. */
     public LocalDate parseDate(String command) throws PeanutButterCatException {
+        assert parseCommandType(command) == CommandType.ON : "Date parser must receive an on command";
+
         String value = command.substring(CommandType.ON.getCommandWord().length()).trim();
         if (value.isEmpty()) {
             throw new PeanutButterCatException("Which date should I search? Use: on yyyy-MM-dd");
@@ -108,6 +120,11 @@ public class Parser {
     /** Converts a one-based task number into a zero-based list index. */
     public int parseTaskIndex(String command, String commandWord, int numberOfTasks)
             throws PeanutButterCatException {
+        assert command != null : "Command to parse must not be null";
+        assert commandWord != null && !commandWord.isBlank() : "Command word must not be blank";
+        assert command.trim().startsWith(commandWord) : "Command must start with its command word";
+        assert numberOfTasks >= 0 : "Task count must not be negative";
+
         String numberText = command.substring(commandWord.length()).trim();
         if (numberText.isEmpty()) {
             throw new PeanutButterCatException("Which task should I " + commandWord
@@ -124,6 +141,8 @@ public class Parser {
             throw new PeanutButterCatException("I can't find task " + taskNumber
                     + " in my cat basket. Check 'list' and try again!");
         }
-        return taskNumber - 1;
+        int taskIndex = taskNumber - 1;
+        assert taskIndex >= 0 && taskIndex < numberOfTasks : "Validated task index must be in range";
+        return taskIndex;
     }
 }

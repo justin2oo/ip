@@ -33,6 +33,9 @@ public class MainWindow extends AnchorPane {
     /** Keeps the latest dialog visible after a message is added. */
     @FXML
     public void initialize() {
+        assert scrollPane != null : "FXML must inject the scroll pane before initialization";
+        assert dialogContainer != null : "FXML must inject the dialog container before initialization";
+
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
@@ -50,6 +53,10 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
+        assert peanutButterCat != null : "Command backend must be configured before handling input";
+        assert userInput != null : "FXML must inject the input field before handling input";
+        assert dialogContainer != null : "FXML must inject the dialog container before handling input";
+
         String input = userInput.getText().trim();
         if (input.isEmpty()) {
             return;

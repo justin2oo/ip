@@ -103,13 +103,18 @@ public class PeanutButterCat {
     }
 
     private String deleteTask(String command, CommandType commandType) throws PeanutButterCatException {
+        assert commandType == CommandType.DELETE : "Delete handler must receive a delete command";
+
         int taskIndex = parser.parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
+        assert taskIndex >= 0 && taskIndex < tasks.size() : "Parsed task index must exist before deletion";
         Task removedTask = tasks.remove(taskIndex);
         storage.save(tasks);
         return ui.getTaskDeletedMessage(removedTask, tasks.size());
     }
 
     private String addTodo(String command, CommandType commandType) throws PeanutButterCatException {
+        assert commandType == CommandType.TODO : "Todo handler must receive a todo command";
+
         String description = parser.getDescription(command, commandType.getCommandWord());
         Task todo = new Todo(description);
         tasks.add(todo);
@@ -119,6 +124,8 @@ public class PeanutButterCat {
 
     private String addDeadline(String command) throws PeanutButterCatException {
         String[] deadlineDetails = parser.parseDeadline(command);
+        assert deadlineDetails.length == 2 : "Parsed deadline must contain a description and due time";
+
         Task deadline = new Deadline(deadlineDetails[0], parser.parseDateTime(deadlineDetails[1]));
         tasks.add(deadline);
         storage.save(tasks);
@@ -127,6 +134,8 @@ public class PeanutButterCat {
 
     private String addEvent(String command) throws PeanutButterCatException {
         String[] eventDetails = parser.parseEvent(command);
+        assert eventDetails.length == 3 : "Parsed event must contain a description, start, and end time";
+
         Task event = new Event(eventDetails[0], parser.parseDateTime(eventDetails[1]),
                 parser.parseDateTime(eventDetails[2]));
         tasks.add(event);
@@ -144,7 +153,11 @@ public class PeanutButterCat {
      */
     private String updateTaskStatus(String command, CommandType commandType, boolean isDone)
             throws PeanutButterCatException {
+        assert commandType == CommandType.MARK || commandType == CommandType.UNMARK
+                : "Status handler must receive a mark or unmark command";
+
         int taskIndex = parser.parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
+        assert taskIndex >= 0 && taskIndex < tasks.size() : "Parsed task index must exist before status update";
         Task task = tasks.get(taskIndex);
         if (isDone) {
             task.markAsDone();
