@@ -132,6 +132,29 @@ public class Ui {
         return message + System.lineSeparator() + "  " + task;
     }
 
+    /**
+     * Returns the completion statistics for the last seven calendar days.
+     *
+     * @param completedTaskCount Number of tasks completed in the reporting period.
+     * @param unknownDateTaskCount Number of completed tasks excluded because their date is unknown.
+     * @return Formatted statistics message.
+     */
+    public String getStatisticsMessage(long completedTaskCount, long unknownDateTaskCount) {
+        assert completedTaskCount >= 0 : "Completed task count must not be negative";
+        assert unknownDateTaskCount >= 0 : "Unknown completion date count must not be negative";
+
+        String message = "Tasks completed in the last 7 calendar days: " + completedTaskCount + ".";
+        if (unknownDateTaskCount == 0) {
+            return message;
+        }
+        if (unknownDateTaskCount == 1) {
+            return message + System.lineSeparator()
+                    + "Note: 1 completed task has an unknown completion date and was not counted.";
+        }
+        return message + System.lineSeparator() + "Note: " + unknownDateTaskCount
+                + " completed tasks have unknown completion dates and were not counted.";
+    }
+
     private String getTaskCountMessage(int taskCount) {
         assert taskCount >= 0 : "Displayed task count must not be negative";
 

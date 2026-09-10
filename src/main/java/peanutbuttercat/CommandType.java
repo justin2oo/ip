@@ -14,6 +14,7 @@ public enum CommandType {
     DEADLINE("deadline", true),
     EVENT("event", true),
     ON("on", true),
+    STATISTICS("stats", true),
     UNKNOWN("", false);
 
     private final String commandWord;

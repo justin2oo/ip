@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class Storage {
                     continue;
                 }
                 try {
-                    tasks.add(createTaskFromRecord(taskRecord));
+                    tasks.add(createTaskFromRecord(taskRecord, lineNumber));
                 } catch (IllegalArgumentException exception) {
                     System.err.println("Ignoring invalid task record at line " + lineNumber + ".");
                 }
@@ -78,38 +79,52 @@ public class Storage {
         return tasks;
     }
 
-    private static Task createTaskFromRecord(String taskRecord) {
+    private static Task createTaskFromRecord(String taskRecord, int lineNumber) {
         String[] details = splitStorageRecord(taskRecord);
-        if (details.length < 3 || details.length > 5
-                || (!details[1].equals("0") && !details[1].equals("1"))) {
+        if (details.length < 3 || (!details[1].equals("0") && !details[1].equals("1"))) {
             throw new IllegalArgumentException("Malformed task record");
         }
         Task task;
+        int baseFieldCount;
         switch (details[0]) {
             case "T":
-                requireFieldCount(details, 3);
+                baseFieldCount = 3;
+                requireSupportedFieldCount(details, baseFieldCount);
                 task = new Todo(details[2]);
                 break;
             case "D":
-                requireFieldCount(details, 4);
+                baseFieldCount = 4;
+                requireSupportedFieldCount(details, baseFieldCount);
                 task = new Deadline(details[2], parseStoredDateTime(details[3]));
                 break;
             case "E":
-                requireFieldCount(details, 5);
+                baseFieldCount = 5;
+                requireSupportedFieldCount(details, baseFieldCount);
                 task = new Event(details[2], parseStoredDateTime(details[3]), parseStoredDateTime(details[4]));
                 break;
             default:
                 throw new IllegalArgumentException("Unknown task type in saved data: " + details[0]);
         }
 
-        if (details[1].equals("1")) {
-            task.markAsDone();
+        boolean isDone = details[1].equals("1");
+        LocalDate completionDate = null;
+        if (details.length == baseFieldCount + 1) {
+            try {
+                completionDate = parseStoredCompletionDate(details[baseFieldCount]);
+                if (!isDone) {
+                    throw new IllegalArgumentException("Incomplete task has completion metadata");
+                }
+            } catch (IllegalArgumentException exception) {
+                System.err.println("Ignoring invalid completion metadata at line " + lineNumber + ".");
+                completionDate = null;
+            }
         }
+        task.restoreCompletion(isDone, completionDate);
         return task;
     }
 
-    private static void requireFieldCount(String[] details, int expected) {
-        if (details.length != expected) {
+    private static void requireSupportedFieldCount(String[] details, int baseFieldCount) {
+        if (details.length < baseFieldCount || details.length > baseFieldCount + 1) {
             throw new IllegalArgumentException("Malformed task record");
         }
     }
@@ -148,6 +163,14 @@ public class Storage {
             return LocalDateTime.parse(value);
         } catch (DateTimeParseException exception) {
             throw new IllegalArgumentException("Invalid stored date", exception);
+        }
+    }
+
+    private static LocalDate parseStoredCompletionDate(String value) {
+        try {
+            return LocalDate.parse(value);
+        } catch (DateTimeParseException exception) {
+            throw new IllegalArgumentException("Invalid stored completion date", exception);
         }
     }
 }

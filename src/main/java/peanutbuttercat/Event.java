@@ -76,7 +76,7 @@ public class Event extends Task {
      */
     @Override
     public String toFileString() {
-        return "E | " + getCompletionState() + " | " + escapeStorageField(getDescription())
-                + " | " + from + " | " + to;
+        return appendCompletionDate("E | " + getCompletionState() + " | "
+                + escapeStorageField(getDescription()) + " | " + from + " | " + to);
     }
 }

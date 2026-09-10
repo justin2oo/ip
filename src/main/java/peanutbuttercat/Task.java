@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class Task {
     private final String description;
     private boolean isDone;
+    private LocalDate completionDate;
 
     /**
      * Creates an incomplete task with the given description.
@@ -17,6 +18,7 @@ public class Task {
     public Task(String description) {
         this.description = requireNonBlank(description, "description");
         this.isDone = false;
+        this.completionDate = null;
     }
 
     /**
@@ -42,7 +44,22 @@ public class Task {
      * Marks this task as completed.
      */
     public void markAsDone() {
-        isDone = true;
+        markAsDone(LocalDate.now());
+    }
+
+    /**
+     * Marks this task as completed on the supplied date if it is currently incomplete.
+     *
+     * @param completionDate Date on which the task was completed.
+     */
+    public void markAsDone(LocalDate completionDate) {
+        if (completionDate == null) {
+            throw new IllegalArgumentException("Task completion date cannot be blank.");
+        }
+        if (!isDone) {
+            isDone = true;
+            this.completionDate = completionDate;
+        }
     }
 
     /**
@@ -50,6 +67,23 @@ public class Task {
      */
     public void markAsNotDone() {
         isDone = false;
+        completionDate = null;
+    }
+
+    /** Returns whether this task is complete. */
+    public boolean isDone() {
+        return isDone;
+    }
+
+    /** Returns the completion date, or {@code null} when it is unknown or the task is incomplete. */
+    public LocalDate getCompletionDate() {
+        return completionDate;
+    }
+
+    /** Restores completion data without treating loading as a new completion action. */
+    void restoreCompletion(boolean isDone, LocalDate completionDate) {
+        this.isDone = isDone;
+        this.completionDate = isDone ? completionDate : null;
     }
 
     /**
@@ -58,7 +92,8 @@ public class Task {
      * @return A pipe-delimited task record.
      */
     public String toFileString() {
-        return "T | " + getCompletionState() + " | " + escapeStorageField(description);
+        return appendCompletionDate("T | " + getCompletionState() + " | "
+                + escapeStorageField(description));
     }
 
     /**
@@ -88,6 +123,11 @@ public class Task {
      */
     protected String getDescription() {
         return description;
+    }
+
+    /** Appends the optional completion date to a task's storage record. */
+    protected String appendCompletionDate(String taskRecord) {
+        return completionDate == null ? taskRecord : taskRecord + " | " + completionDate;
     }
 
     private String getStatusIcon() {
