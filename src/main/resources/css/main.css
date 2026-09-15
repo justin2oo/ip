@@ -27,6 +27,26 @@
     -fx-text-fill: #f9dfad;
 }
 
+.command-panel {
+    -fx-background-color: rgba(255, 251, 241, 0.96);
+    -fx-border-color: #dfbb82 transparent transparent transparent;
+    -fx-border-width: 1.5 0 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(72, 39, 23, 0.16), 12, 0.20, 0, -2);
+}
+
+.command-panel-title {
+    -fx-font-family: "Trebuchet MS";
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #704127;
+}
+
+.command-panel-hint {
+    -fx-font-family: "Trebuchet MS";
+    -fx-font-size: 9px;
+    -fx-text-fill: #a27a5c;
+}
+
 .text-field {
     -fx-background-color: #fffdf7;
     -fx-background-radius: 12;
@@ -37,6 +57,12 @@
     -fx-font-size: 14px;
     -fx-padding: 0 12 0 12;
     -fx-prompt-text-fill: #9c765b;
+}
+
+.text-field:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #a4512a;
+    -fx-effect: dropshadow(gaussian, rgba(184, 92, 45, 0.16), 6, 0.25, 0, 0);
 }
 
 .button {
