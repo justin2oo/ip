@@ -53,7 +53,7 @@ public class Parser {
         String arguments = command.substring(commandWord.length()).trim();
         if (!arguments.isEmpty()) {
             throw new PeanutButterCatException(
-                    "My whiskers don't need extra details for statistics! Use: stats");
+                    "No extra toppings needed for statistics! Use: stats");
         }
     }
 
@@ -171,7 +171,7 @@ public class Parser {
         }
         if (taskNumber < 1 || taskNumber > numberOfTasks) {
             throw new PeanutButterCatException("I can't find task " + taskNumber
-                    + " in my cat basket. Check 'list' and try again!");
+                    + " in the task jar. Check 'list' and try again!");
         }
         int taskIndex = taskNumber - 1;
         assert taskIndex >= 0 && taskIndex < numberOfTasks : "Validated task index must be in range";

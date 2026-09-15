@@ -21,14 +21,24 @@ class PeanutButterCatTest {
     Path temporaryDirectory;
 
     @Test
+    void getWelcomeMessage_newConversation_returnsPersonalityGreeting() {
+        PeanutButterCat peanutButterCat = createChatbot();
+
+        assertEquals("Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper."
+                        + System.lineSeparator()
+                        + "Tell me what's on your plate, and I'll tuck it into the task jar.",
+                peanutButterCat.getWelcomeMessage());
+    }
+
+    @Test
     void getResponse_addThenList_returnsFormattedResponses() {
         PeanutButterCat peanutButterCat = createChatbot();
 
-        assertEquals("Purr-fect! I've added this task to my cat basket:" + System.lineSeparator()
+        assertEquals("Spread the word - this task is in the jar:" + System.lineSeparator()
                         + "[T][ ] buy cat food" + System.lineSeparator()
-                        + "My cat basket now holds 1 task.",
+                        + "The task jar now holds 1 task.",
                 peanutButterCat.getResponse("todo buy cat food"));
-        assertEquals("Here are the tasks in my cat basket:" + System.lineSeparator()
+        assertEquals("Here's what's tucked in the task jar:" + System.lineSeparator()
                         + "1.[T][ ] buy cat food",
                 peanutButterCat.getResponse("list"));
     }
@@ -37,9 +47,26 @@ class PeanutButterCatTest {
     void getResponse_invalidCommand_returnsErrorAndKeepsTasks() {
         PeanutButterCat peanutButterCat = createChatbot();
 
-        assertEquals("Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!",
+        assertEquals("My whiskers can't sort that command yet. Try another scoop, purr-lease!",
                 peanutButterCat.getResponse("sleep"));
-        assertEquals("Here are the tasks in my cat basket:", peanutButterCat.getResponse("list"));
+        assertEquals("Here's what's tucked in the task jar:", peanutButterCat.getResponse("list"));
+    }
+
+    @Test
+    void getResponse_statusChangesAndDelete_returnsPersonalityResponses() {
+        PeanutButterCat peanutButterCat = createChatbot(fixedClock());
+        peanutButterCat.getResponse("todo submit report");
+
+        assertEquals("Paw-some! That's one smooth finish:" + System.lineSeparator()
+                        + "  [T][X] submit report",
+                peanutButterCat.getResponse("mark 1"));
+        assertEquals("Back on the plate! This task is active again:" + System.lineSeparator()
+                        + "  [T][ ] submit report",
+                peanutButterCat.getResponse("unmark 1"));
+        assertEquals("Scoop complete! I've removed this task from the jar:" + System.lineSeparator()
+                        + "  [T][ ] submit report" + System.lineSeparator()
+                        + "The task jar now holds 0 tasks.",
+                peanutButterCat.getResponse("delete 1"));
     }
 
     @Test
@@ -64,7 +91,7 @@ class PeanutButterCatTest {
         peanutButterCat.getResponse("todo submit report");
         peanutButterCat.getResponse("mark 1");
 
-        assertEquals("Tasks completed in the last 7 calendar days: 1.",
+        assertEquals("In the last 7 calendar days, you finished 1 task. Nice spread!",
                 peanutButterCat.getResponse("stats"));
     }
 
@@ -72,7 +99,7 @@ class PeanutButterCatTest {
     void getResponse_statsWithArguments_returnsSpecificError() {
         PeanutButterCat peanutButterCat = createChatbot(fixedClock());
 
-        assertEquals("My whiskers don't need extra details for statistics! Use: stats",
+        assertEquals("No extra toppings needed for statistics! Use: stats",
                 peanutButterCat.getResponse("stats week"));
     }
 
@@ -84,7 +111,7 @@ class PeanutButterCatTest {
         PeanutButterCat peanutButterCat = new PeanutButterCat(
                 new Storage(saveFile.toString()), new Parser(), fixedClock());
 
-        assertEquals("Tasks completed in the last 7 calendar days: 0." + System.lineSeparator()
+        assertEquals("In the last 7 calendar days, you finished 0 tasks. Nice spread!" + System.lineSeparator()
                         + "Note: 1 completed task has an unknown completion date and was not counted.",
                 peanutButterCat.getResponse("stats"));
         assertEquals(List.of("T | 1 | old completed task"), Files.readAllLines(saveFile));

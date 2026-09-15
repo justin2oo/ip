@@ -19,13 +19,13 @@ bye
 ```text
 ____________________________________________________________
  /\_/\
-( o.o )  peanutbuttercat
+( o.o )  PeanutButterCat
  > u <
-Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What pawsome task can we tackle together?
+Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper.
+Tell me what's on your plate, and I'll tuck it into the task jar.
 ____________________________________________________________
 ____________________________________________________________
-Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+The task jar is safe with me. Stay smooth, and see you soon!
 ____________________________________________________________
 ```
 
@@ -44,37 +44,37 @@ bye
 ```text
 ____________________________________________________________
  /\_/\
-( o.o )  peanutbuttercat
+( o.o )  PeanutButterCat
  > u <
-Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What pawsome task can we tackle together?
+Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper.
+Tell me what's on your plate, and I'll tuck it into the task jar.
 ____________________________________________________________
 ____________________________________________________________
-Purr-fect! I've added this task to my cat basket:
+Spread the word - this task is in the jar:
 [T][ ] read book
-My cat basket now holds 1 task.
+The task jar now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-Purr-fect! I've added this task to my cat basket:
+Spread the word - this task is in the jar:
 [D][ ] return book (by: Jun 06 2026 6:00 pm)
-My cat basket now holds 2 tasks.
+The task jar now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Purr-fect! I've added this task to my cat basket:
+Spread the word - this task is in the jar:
 [T][ ] buy groceries
-My cat basket now holds 3 tasks.
+The task jar now holds 3 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Here are the matching tasks in your list:
+I sniffed out these matching tasks:
 1.[T][ ] read book
 2.[D][ ] return book (by: Jun 06 2026 6:00 pm)
 ____________________________________________________________
 ____________________________________________________________
-Here are the matching tasks in your list:
-No matching tasks found.
+I sniffed out these matching tasks:
+No matching crumbs found.
 ____________________________________________________________
 ____________________________________________________________
-Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+The task jar is safe with me. Stay smooth, and see you soon!
 ____________________________________________________________
 ```
 
@@ -92,33 +92,33 @@ bye
 ```text
 ____________________________________________________________
  /\_/\
-( o.o )  peanutbuttercat
+( o.o )  PeanutButterCat
  > u <
-Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What pawsome task can we tackle together?
+Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper.
+Tell me what's on your plate, and I'll tuck it into the task jar.
 ____________________________________________________________
 ____________________________________________________________
-Purr-fect! I've added this task to my cat basket:
+Spread the word - this task is in the jar:
 [D][ ] return book (by: Dec 02 2019 6:00 pm)
-My cat basket now holds 1 task.
+The task jar now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-Purr-fect! I've added this task to my cat basket:
+Spread the word - this task is in the jar:
 [E][ ] project meeting (from: Dec 02 2019 7:00 pm to: Dec 02 2019 8:00 pm)
-My cat basket now holds 2 tasks.
+The task jar now holds 2 tasks.
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks on Dec 02 2019:
+Here's what's on the plate for Dec 02 2019:
 1.[D][ ] return book (by: Dec 02 2019 6:00 pm)
 2.[E][ ] project meeting (from: Dec 02 2019 7:00 pm to: Dec 02 2019 8:00 pm)
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in my cat basket:
+Here's what's tucked in the task jar:
 1.[D][ ] return book (by: Dec 02 2019 6:00 pm)
 2.[E][ ] project meeting (from: Dec 02 2019 7:00 pm to: Dec 02 2019 8:00 pm)
 ____________________________________________________________
 ____________________________________________________________
-Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+The task jar is safe with me. Stay smooth, and see you soon!
 ____________________________________________________________
 ```
 
@@ -136,10 +136,10 @@ bye
 ```text
 ____________________________________________________________
  /\_/\
-( o.o )  peanutbuttercat
+( o.o )  PeanutButterCat
  > u <
-Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What pawsome task can we tackle together?
+Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper.
+Tell me what's on your plate, and I'll tuck it into the task jar.
 ____________________________________________________________
 ____________________________________________________________
 I couldn't understand that date. Use yyyy-MM-dd or d/M/yyyy HHmm, purr-lease!
@@ -148,16 +148,16 @@ ____________________________________________________________
 I couldn't understand that date. Use yyyy-MM-dd or d/M/yyyy HHmm, purr-lease!
 ____________________________________________________________
 ____________________________________________________________
-Purr-fect! I've added this task to my cat basket:
+Spread the word - this task is in the jar:
 [T][ ] recover gracefully
-My cat basket now holds 1 task.
+The task jar now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-Here are the tasks in my cat basket:
+Here's what's tucked in the task jar:
 1.[T][ ] recover gracefully
 ____________________________________________________________
 ____________________________________________________________
-Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+The task jar is safe with me. Stay smooth, and see you soon!
 ____________________________________________________________
 ```
 
@@ -177,34 +177,34 @@ bye
 ```text
 ____________________________________________________________
  /\_/\
-( o.o )  peanutbuttercat
+( o.o )  PeanutButterCat
  > u <
-Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-What pawsome task can we tackle together?
+Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper.
+Tell me what's on your plate, and I'll tuck it into the task jar.
 ____________________________________________________________
 ____________________________________________________________
-Purr-fect! I've added this task to my cat basket:
+Spread the word - this task is in the jar:
 [T][ ] submit report
-My cat basket now holds 1 task.
+The task jar now holds 1 task.
 ____________________________________________________________
 ____________________________________________________________
-Pawsome! I've marked this task as done:
+Paw-some! That's one smooth finish:
   [T][X] submit report
 ____________________________________________________________
 ____________________________________________________________
-Tasks completed in the last 7 calendar days: 1.
+In the last 7 calendar days, you finished 1 task. Nice spread!
 ____________________________________________________________
 ____________________________________________________________
-No paw-blem! I've marked this task as not done yet:
+Back on the plate! This task is active again:
   [T][ ] submit report
 ____________________________________________________________
 ____________________________________________________________
-Tasks completed in the last 7 calendar days: 0.
+In the last 7 calendar days, you finished 0 tasks. Nice spread!
 ____________________________________________________________
 ____________________________________________________________
-My whiskers don't need extra details for statistics! Use: stats
+No extra toppings needed for statistics! Use: stats
 ____________________________________________________________
 ____________________________________________________________
-Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+The task jar is safe with me. Stay smooth, and see you soon!
 ____________________________________________________________
 ```
