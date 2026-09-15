@@ -13,11 +13,18 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
- * Represents one chat message with its speaker's avatar.
+ * Presents a user command or an application response in the conversation.
  */
 public class DialogBox extends HBox {
+    @FXML
+    private VBox messageCard;
+
+    @FXML
+    private Label speaker;
+
     @FXML
     private Label dialog;
 
@@ -34,6 +41,8 @@ public class DialogBox extends HBox {
             exception.printStackTrace();
         }
 
+        assert messageCard != null : "FXML must inject the message card before use";
+        assert speaker != null : "FXML must inject the speaker label before use";
         assert dialog != null : "FXML must inject the dialog label before use";
         assert displayPicture != null : "FXML must inject the display picture before use";
 
@@ -41,15 +50,27 @@ public class DialogBox extends HBox {
         displayPicture.setImage(image);
     }
 
-    /**
-     * Reverses the layout so that the avatar appears on the left for a reply.
-     */
-    private void flip() {
+    /** Configures the row as a branded application response with an avatar. */
+    private void configureAsApplicationResponse() {
         ObservableList<Node> children = FXCollections.observableArrayList(getChildren());
         Collections.reverse(children);
         getChildren().setAll(children);
         setAlignment(Pos.TOP_LEFT);
+        getStyleClass().add("application-dialog-row");
+        messageCard.getStyleClass().add("application-message-card");
+        speaker.setText("PEANUTBUTTERCAT • TASK KEEPER");
+        speaker.getStyleClass().add("application-speaker");
         dialog.getStyleClass().add("reply-label");
+    }
+
+    /** Configures the row as a compact command issued by the user. */
+    private void configureAsUserCommand() {
+        getStyleClass().add("user-dialog-row");
+        messageCard.getStyleClass().add("user-message-card");
+        speaker.setText("YOU • COMMAND");
+        speaker.getStyleClass().add("user-speaker");
+        displayPicture.setManaged(false);
+        displayPicture.setVisible(false);
     }
 
     /** Applies a soft reply color that reflects the command's purpose. */
@@ -88,11 +109,12 @@ public class DialogBox extends HBox {
      * Creates a dialog box for a message entered by the user.
      *
      * @param text The message text.
-     * @param image The user's avatar.
-     * @return A right-aligned user dialog box.
+     * @return A compact, right-aligned user command.
      */
-    public static DialogBox getUserDialog(String text, Image image) {
-        return new DialogBox(text, image);
+    public static DialogBox getUserDialog(String text) {
+        DialogBox dialogBox = new DialogBox(text, null);
+        dialogBox.configureAsUserCommand();
+        return dialogBox;
     }
 
     /**
@@ -104,7 +126,7 @@ public class DialogBox extends HBox {
      */
     public static DialogBox getPeanutButterCatDialog(String text, Image image) {
         DialogBox dialogBox = new DialogBox(text, image);
-        dialogBox.flip();
+        dialogBox.configureAsApplicationResponse();
         return dialogBox;
     }
 
@@ -118,7 +140,7 @@ public class DialogBox extends HBox {
      */
     public static DialogBox getPeanutButterCatDialog(String text, Image image, CommandType commandType) {
         DialogBox dialogBox = new DialogBox(text, image);
-        dialogBox.flip();
+        dialogBox.configureAsApplicationResponse();
         dialogBox.applyCommandStyle(commandType);
         return dialogBox;
     }
