@@ -27,7 +27,6 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private PeanutButterCat peanutButterCat;
-    private final Image userImage = loadImage("/images/DaUser.png");
     private final Image peanutButterCatImage = loadImage("/images/DaDuke.png");
 
     /** Keeps the latest dialog visible after a message is added. */
@@ -67,7 +66,7 @@ public class MainWindow extends AnchorPane {
         CommandType commandType = peanutButterCat.getCommandType(input);
         String response = peanutButterCat.getResponse(input);
         dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
+                DialogBox.getUserDialog(input),
                 DialogBox.getPeanutButterCatDialog(response, peanutButterCatImage, commandType));
         userInput.clear();
     }
