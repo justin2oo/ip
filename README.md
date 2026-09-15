@@ -1,6 +1,8 @@
-# peanutbuttercat
+# PeanutButterCat
 
-This is a greenfield Java project for the peanutbuttercat chatbot. Given below are instructions on how to use it.
+PeanutButterCat is a cozy, snack-powered task keeper that stores your tasks in its imaginary task jar. Its warm
+peanut-butter palette, illustrated cat avatar, and playful phrases give the chatbot a friendly, consistent identity.
+Given below are instructions on how to use it.
 
 ## Setting up in Intellij
 
@@ -17,14 +19,14 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
    ____________________________________________________________
     /\_/\
-   ( o.o )  peanutbuttercat
+   ( o.o )  PeanutButterCat
     > u <
-   Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!
-   What awesome task can we tackle together?
+   Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper.
+   Tell me what's on your plate, and I'll tuck it into the task jar.
    ____________________________________________________________
    bye
    ____________________________________________________________
-   Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!
+   The task jar is safe with me. Stay smooth, and see you soon!
    ____________________________________________________________
    ```
 

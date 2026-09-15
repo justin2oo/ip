@@ -15,11 +15,17 @@ public class Ui {
     public void showWelcome() {
         System.out.println(HORIZONTAL_LINE);
         System.out.println(" /\\_/\\\n"
-                + "( o.o )  peanutbuttercat\n"
+                + "( o.o )  PeanutButterCat\n"
                 + " > u <");
-        System.out.println("Hey! I'm peanutbuttercat, and I'm pawsitively ready to help!");
-        System.out.println("What pawsome task can we tackle together?");
+        System.out.println(getWelcomeMessage());
         showLine();
+    }
+
+    /** Returns the chatbot's welcome message. */
+    public String getWelcomeMessage() {
+        return "Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper."
+                + System.lineSeparator()
+                + "Tell me what's on your plate, and I'll tuck it into the task jar.";
     }
 
     /** Displays the separator between interactions. */
@@ -35,7 +41,7 @@ public class Ui {
 
     /** Returns the chatbot's farewell message. */
     public String getFarewellMessage() {
-        return "Bye! Hope to see you again soon. Stay pawsitive and keep spreading the peanut butter!";
+        return "The task jar is safe with me. Stay smooth, and see you soon!";
     }
 
     /** Displays a command-processing error. */
@@ -55,7 +61,7 @@ public class Ui {
 
     /** Returns a formatted list of all tasks currently stored. */
     public String getTaskListMessage(TaskList tasks) {
-        StringBuilder message = new StringBuilder("Here are the tasks in my cat basket:");
+        StringBuilder message = new StringBuilder("Here's what's tucked in the task jar:");
         for (int i = 0; i < tasks.size(); i++) {
             message.append(System.lineSeparator()).append(i + 1).append('.').append(tasks.get(i));
         }
@@ -69,9 +75,9 @@ public class Ui {
 
     /** Returns a formatted list of tasks matching a description keyword. */
     public String getMatchingTasksMessage(List<Task> matchingTasks) {
-        StringBuilder message = new StringBuilder("Here are the matching tasks in your list:");
+        StringBuilder message = new StringBuilder("I sniffed out these matching tasks:");
         if (matchingTasks.isEmpty()) {
-            return message.append(System.lineSeparator()).append("No matching tasks found.").toString();
+            return message.append(System.lineSeparator()).append("No matching crumbs found.").toString();
         }
         for (int i = 0; i < matchingTasks.size(); i++) {
             message.append(System.lineSeparator()).append(i + 1).append('.').append(matchingTasks.get(i));
@@ -86,7 +92,7 @@ public class Ui {
 
     /** Returns a formatted list of tasks whose scheduled date includes the supplied date. */
     public String getTasksOnDateMessage(LocalDate date, TaskList tasks) {
-        StringBuilder message = new StringBuilder("Here are the tasks on ")
+        StringBuilder message = new StringBuilder("Here's what's on the plate for ")
                 .append(date.format(DISPLAY_DATE)).append(':');
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
@@ -104,7 +110,7 @@ public class Ui {
 
     /** Returns a confirmation that a task was added. */
     public String getTaskAddedMessage(Task task, int taskCount) {
-        return "Purr-fect! I've added this task to my cat basket:" + System.lineSeparator()
+        return "Spread the word - this task is in the jar:" + System.lineSeparator()
                 + task + System.lineSeparator() + getTaskCountMessage(taskCount);
     }
 
@@ -115,7 +121,7 @@ public class Ui {
 
     /** Returns a confirmation that a task was deleted. */
     public String getTaskDeletedMessage(Task task, int taskCount) {
-        return "Purr-fect! I've removed this task from my cat basket:" + System.lineSeparator()
+        return "Scoop complete! I've removed this task from the jar:" + System.lineSeparator()
                 + "  " + task + System.lineSeparator() + getTaskCountMessage(taskCount);
     }
 
@@ -127,8 +133,8 @@ public class Ui {
     /** Returns a confirmation that a task's completion status changed. */
     public String getTaskStatusMessage(Task task, boolean isDone) {
         String message = isDone
-                ? "Pawsome! I've marked this task as done:"
-                : "No paw-blem! I've marked this task as not done yet:";
+                ? "Paw-some! That's one smooth finish:"
+                : "Back on the plate! This task is active again:";
         return message + System.lineSeparator() + "  " + task;
     }
 
@@ -143,7 +149,9 @@ public class Ui {
         assert completedTaskCount >= 0 : "Completed task count must not be negative";
         assert unknownDateTaskCount >= 0 : "Unknown completion date count must not be negative";
 
-        String message = "Tasks completed in the last 7 calendar days: " + completedTaskCount + ".";
+        String taskWord = completedTaskCount == 1 ? "task" : "tasks";
+        String message = "In the last 7 calendar days, you finished " + completedTaskCount + " "
+                + taskWord + ". Nice spread!";
         if (unknownDateTaskCount == 0) {
             return message;
         }
@@ -159,6 +167,6 @@ public class Ui {
         assert taskCount >= 0 : "Displayed task count must not be negative";
 
         String taskWord = taskCount == 1 ? "task" : "tasks";
-        return "My cat basket now holds " + taskCount + " " + taskWord + ".";
+        return "The task jar now holds " + taskCount + " " + taskWord + ".";
     }
 }

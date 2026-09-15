@@ -96,11 +96,16 @@ public class PeanutButterCat {
                 case ON -> ui.getTasksOnDateMessage(parser.parseDate(command), tasks);
                 case STATISTICS -> getStatistics(command, commandType);
                 case UNKNOWN -> throw new PeanutButterCatException(
-                        "Hiss-terical mix-up! I don't know that command yet. Try another one, purr-lease!");
+                        "My whiskers can't sort that command yet. Try another scoop, purr-lease!");
             };
         } catch (PeanutButterCatException exception) {
             return ui.getErrorMessage(exception.getMessage());
         }
+    }
+
+    /** Returns the greeting used when a user first meets the chatbot. */
+    public String getWelcomeMessage() {
+        return ui.getWelcomeMessage();
     }
 
     /**

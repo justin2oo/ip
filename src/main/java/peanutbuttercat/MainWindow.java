@@ -46,6 +46,8 @@ public class MainWindow extends AnchorPane {
      */
     public void setPeanutButterCat(PeanutButterCat peanutButterCat) {
         this.peanutButterCat = peanutButterCat;
+        dialogContainer.getChildren().add(
+                DialogBox.getPeanutButterCatDialog(peanutButterCat.getWelcomeMessage(), peanutButterCatImage));
     }
 
     /**

@@ -21,8 +21,9 @@ public class Main extends Application {
             AnchorPane mainWindow = fxmlLoader.load();
             Scene scene = new Scene(mainWindow);
             stage.setScene(scene);
-            stage.setMinHeight(220);
-            stage.setMinWidth(417);
+            stage.setTitle("PeanutButterCat — Cozy Task Keeper");
+            stage.setMinHeight(420);
+            stage.setMinWidth(457);
             fxmlLoader.<MainWindow>getController().setPeanutButterCat(peanutButterCat);
             stage.show();
         } catch (IOException exception) {
