@@ -31,6 +31,11 @@ public class TaskList {
         tasks.add(task);
     }
 
+    /** Inserts a task at the given zero-based index when reverting a failed deletion. */
+    void insert(int index, Task task) {
+        tasks.add(index, task);
+    }
+
     /** Removes and returns the task at the zero-based index. */
     public Task remove(int index) {
         return tasks.remove(index);

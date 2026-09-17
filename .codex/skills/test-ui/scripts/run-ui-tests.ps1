@@ -135,7 +135,9 @@ if (-not $javaVersionMatch.Success -or $javaVersionMatch.Groups['major'].Value -
 }
 
 $sourcePath = Join-Path $projectRoot $sourceDirectory
-$javaFiles = @(Get-ChildItem -LiteralPath $sourcePath -Filter '*.java' -File -Recurse)
+$javaFiles = @(Get-ChildItem -LiteralPath $sourcePath -Filter '*.java' -File -Recurse | Where-Object {
+    -not (Select-String -LiteralPath $_.FullName -Pattern '^import javafx\.' -Quiet)
+})
 if ($javaFiles.Count -eq 0) {
     throw "No Java source files found under $sourcePath"
 }

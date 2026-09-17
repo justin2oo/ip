@@ -121,6 +121,15 @@ class ParserTest {
     }
 
     @Test
+    void parseEvent_endBeforeStart_exceptionThrownWithHelpfulMessage() {
+        PeanutButterCatException exception = assertThrows(PeanutButterCatException.class, () ->
+                parser.parseEvent("event team meeting /from 2019-12-02 2000 /to 2019-12-02 1900"));
+
+        assertEquals("That event ends before it starts. Please check the '/from' and '/to' times!",
+                exception.getMessage());
+    }
+
+    @Test
     void parseDateTime_supportedDateAndTimeFormats_returnsExpectedValues()
             throws PeanutButterCatException {
         assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0),

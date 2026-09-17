@@ -45,13 +45,22 @@ From the project root, use JDK 25 and run:
 The generated file is:
 
 ```text
-build\libs\duke.jar
+build\libs\peanutbuttercat.jar
 ```
 
 Run it from the project root with:
 
 ```powershell
-java -jar build\libs\duke.jar
+java -jar build\libs\peanutbuttercat.jar
 ```
 
-The application stores tasks in `data\duke.txt`, relative to the directory from which the JAR is run. To rebuild a fresh JAR, run `.\gradlew.bat clean shadowJar`; `clean` removes previous build outputs before Shadow creates the new JAR.
+The application stores tasks in `data\peanutbuttercat.txt`, relative to the directory from which the JAR is run. If
+the file does not exist yet, PeanutButterCat starts with an empty task jar and creates the file after the first task
+change. To rebuild a fresh JAR, run `.\gradlew.bat clean shadowJar`; `clean` removes previous build outputs before
+Shadow creates the new JAR.
+
+## Acknowledgements and reused code
+
+This project began from the [SE-EDU Duke project template](https://github.com/se-edu/duke),
+including its Gradle project structure and JavaFX chatbot GUI foundation. Those materials were adapted and extended
+for PeanutButterCat. The original template contributors are credited in [CONTRIBUTORS.md](CONTRIBUTORS.md).

@@ -6,7 +6,7 @@
 - Source directory: `src/main/java`
 - Required Java major version: `25`
 - Capacity: The task list grows dynamically and has no fixed 100-task limit.
-- Isolation: Each test case starts a fresh application process with no `data/duke.txt` file.
+- Isolation: Each test case starts a fresh application process with no `data/peanutbuttercat.txt` file.
 - Comparison: Output must match exactly after normalizing CRLF/LF line endings and ignoring one final line terminator.
 
 ## Test case: Exit the application
@@ -146,6 +146,53 @@ I couldn't understand that date. Use yyyy-MM-dd or d/M/yyyy HHmm, purr-lease!
 ____________________________________________________________
 ____________________________________________________________
 I couldn't understand that date. Use yyyy-MM-dd or d/M/yyyy HHmm, purr-lease!
+____________________________________________________________
+____________________________________________________________
+Spread the word - this task is in the jar:
+[T][ ] recover gracefully
+The task jar now holds 1 task.
+____________________________________________________________
+____________________________________________________________
+Here's what's tucked in the task jar:
+1.[T][ ] recover gracefully
+____________________________________________________________
+____________________________________________________________
+The task jar is safe with me. Stay smooth, and see you soon!
+____________________________________________________________
+```
+
+## Test case: Explain common command mistakes and continue
+**Aim:** Verify that missing details, invalid task numbers, reversed event times, and unknown commands are explained without terminating the application.
+### Inputs
+```text
+todo
+mark two
+event evening class /from 2026-09-17 2000 /to 2026-09-17 1900
+typo
+todo recover gracefully
+list
+bye
+```
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  PeanutButterCat
+ > u <
+Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper.
+Tell me what's on your plate, and I'll tuck it into the task jar.
+____________________________________________________________
+____________________________________________________________
+Oops, this kitty needs a description for your todo! Please add one after 'todo'.
+____________________________________________________________
+____________________________________________________________
+My paws can only count whole task numbers. Try 'mark 1', for example!
+____________________________________________________________
+____________________________________________________________
+That event ends before it starts. Please check the '/from' and '/to' times!
+____________________________________________________________
+____________________________________________________________
+My whiskers can't sort that command yet. Try another scoop, purr-lease!
 ____________________________________________________________
 ____________________________________________________________
 Spread the word - this task is in the jar:

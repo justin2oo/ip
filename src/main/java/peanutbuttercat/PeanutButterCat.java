@@ -5,17 +5,18 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 /**
- * Starts the peanutbuttercat chatbot.
+ * Starts the PeanutButterCat chatbot.
  */
 public class PeanutButterCat {
     /** Relative, OS-independent location used for the application's saved tasks. */
-    private static final String DEFAULT_STORAGE_PATH = "data/duke.txt";
+    private static final String DEFAULT_STORAGE_PATH = "data/peanutbuttercat.txt";
 
     private final Storage storage;
     private final Parser parser;
     private final Ui ui;
     private final TaskList tasks;
     private final Clock clock;
+    private final String startupWarning;
 
     /** Creates the chatbot backed by its default task storage file. */
     public PeanutButterCat() {
@@ -45,6 +46,7 @@ public class PeanutButterCat {
         this.ui = new Ui();
         this.tasks = new TaskList(storage.load());
         this.clock = clock;
+        this.startupWarning = storage.getLoadWarning();
     }
 
     /**
@@ -55,7 +57,7 @@ public class PeanutButterCat {
     public static void main(String[] args) {
         PeanutButterCat peanutButterCat = new PeanutButterCat();
         Ui ui = new Ui();
-        ui.showWelcome();
+        ui.showWelcome(peanutButterCat.getWelcomeMessage());
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
@@ -98,14 +100,17 @@ public class PeanutButterCat {
                 case UNKNOWN -> throw new PeanutButterCatException(
                         "My whiskers can't sort that command yet. Try another scoop, purr-lease!");
             };
-        } catch (PeanutButterCatException exception) {
+        } catch (PeanutButterCatException | StorageException exception) {
             return ui.getErrorMessage(exception.getMessage());
         }
     }
 
     /** Returns the greeting used when a user first meets the chatbot. */
     public String getWelcomeMessage() {
-        return ui.getWelcomeMessage();
+        String welcomeMessage = ui.getWelcomeMessage();
+        return startupWarning == null
+                ? welcomeMessage
+                : welcomeMessage + System.lineSeparator() + startupWarning;
     }
 
     /**
@@ -120,41 +125,53 @@ public class PeanutButterCat {
 
     /** Returns whether the supplied input requests that the application exit. */
     public boolean isExitCommand(String input) {
-        return parser.parseCommandType(input.trim()) == CommandType.BYE;
+        return parser.parseCommandType(input) == CommandType.BYE;
     }
 
-    private String deleteTask(String command, CommandType commandType) throws PeanutButterCatException {
+    private String deleteTask(String command, CommandType commandType)
+            throws PeanutButterCatException, StorageException {
         assert commandType == CommandType.DELETE : "Delete handler must receive a delete command";
 
         int taskIndex = parser.parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
         assert taskIndex >= 0 && taskIndex < tasks.size() : "Parsed task index must exist before deletion";
         Task removedTask = tasks.remove(taskIndex);
-        storage.save(tasks);
+        try {
+            storage.save(tasks);
+        } catch (StorageException exception) {
+            tasks.insert(taskIndex, removedTask);
+            throw exception;
+        }
         return ui.getTaskDeletedMessage(removedTask, tasks.size());
     }
 
-    private String addTodo(String command, CommandType commandType) throws PeanutButterCatException {
+    private String addTodo(String command, CommandType commandType)
+            throws PeanutButterCatException, StorageException {
         assert commandType == CommandType.TODO : "Todo handler must receive a todo command";
 
         String description = parser.getDescription(command, commandType.getCommandWord());
         Task todo = new Todo(description);
-        tasks.add(todo);
-        storage.save(tasks);
-        return ui.getTaskAddedMessage(todo, tasks.size());
+        return addTask(todo);
     }
 
-    private String addDeadline(String command) throws PeanutButterCatException {
+    private String addDeadline(String command) throws PeanutButterCatException, StorageException {
         Task deadline = parser.parseDeadline(command);
-        tasks.add(deadline);
-        storage.save(tasks);
-        return ui.getTaskAddedMessage(deadline, tasks.size());
+        return addTask(deadline);
     }
 
-    private String addEvent(String command) throws PeanutButterCatException {
+    private String addEvent(String command) throws PeanutButterCatException, StorageException {
         Task event = parser.parseEvent(command);
-        tasks.add(event);
-        storage.save(tasks);
-        return ui.getTaskAddedMessage(event, tasks.size());
+        return addTask(event);
+    }
+
+    private String addTask(Task task) throws StorageException {
+        tasks.add(task);
+        try {
+            storage.save(tasks);
+        } catch (StorageException exception) {
+            tasks.remove(tasks.size() - 1);
+            throw exception;
+        }
+        return ui.getTaskAddedMessage(task, tasks.size());
     }
 
     private String getStatistics(String command, CommandType commandType) throws PeanutButterCatException {
@@ -176,21 +193,29 @@ public class PeanutButterCat {
      * @param commandType Type of status-changing command.
      * @param isDone Whether the selected task should be marked as done.
      * @throws PeanutButterCatException If the task number is invalid.
+     * @throws StorageException If the updated task list cannot be saved.
      */
     private String updateTaskStatus(String command, CommandType commandType, boolean isDone)
-            throws PeanutButterCatException {
+            throws PeanutButterCatException, StorageException {
         assert commandType == CommandType.MARK || commandType == CommandType.UNMARK
                 : "Status handler must receive a mark or unmark command";
 
         int taskIndex = parser.parseTaskIndex(command, commandType.getCommandWord(), tasks.size());
         assert taskIndex >= 0 && taskIndex < tasks.size() : "Parsed task index must exist before status update";
         Task task = tasks.get(taskIndex);
+        boolean wasDone = task.isDone();
+        LocalDate previousCompletionDate = task.getCompletionDate();
         if (isDone) {
             task.markAsDone(LocalDate.now(clock));
         } else {
             task.markAsNotDone();
         }
-        storage.save(tasks);
+        try {
+            storage.save(tasks);
+        } catch (StorageException exception) {
+            task.restoreCompletion(wasDone, previousCompletionDate);
+            throw exception;
+        }
         return ui.getTaskStatusMessage(task, isDone);
     }
 }

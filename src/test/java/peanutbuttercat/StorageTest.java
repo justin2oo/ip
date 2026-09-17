@@ -2,6 +2,7 @@ package peanutbuttercat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -22,7 +23,7 @@ class StorageTest {
     Path temporaryDirectory;
 
     @Test
-    void save_multipleTasks_writesAllTaskRecordsInOrder() throws IOException {
+    void save_multipleTasks_writesAllTaskRecordsInOrder() throws IOException, StorageException {
         Path saveFile = temporaryDirectory.resolve("data").resolve("tasks.txt");
         Storage storage = new Storage(saveFile.toString());
         TaskList tasks = new TaskList(List.of(
@@ -37,7 +38,7 @@ class StorageTest {
     }
 
     @Test
-    void save_completedTasks_appendsCompletionDates() throws IOException {
+    void save_completedTasks_appendsCompletionDates() throws IOException, StorageException {
         Path saveFile = temporaryDirectory.resolve("data").resolve("tasks.txt");
         Storage storage = new Storage(saveFile.toString());
         Todo todo = new Todo("read book");
@@ -82,11 +83,12 @@ class StorageTest {
         Files.write(saveFile, List.of("T | 1 | completed task | not-a-date"));
         ByteArrayOutputStream errorOutput = new ByteArrayOutputStream();
         PrintStream originalError = System.err;
+        Storage storage = new Storage(saveFile.toString());
         List<Task> tasks;
 
         try {
             System.setErr(new PrintStream(errorOutput));
-            tasks = new Storage(saveFile.toString()).load();
+            tasks = storage.load();
         } finally {
             System.setErr(originalError);
         }
@@ -95,5 +97,31 @@ class StorageTest {
         assertTrue(tasks.get(0).isDone());
         assertNull(tasks.get(0).getCompletionDate());
         assertTrue(errorOutput.toString().contains("Ignoring invalid completion metadata at line 1."));
+        assertEquals("Heads up: some saved task data could not be read. "
+                + "I recovered what I could, so please check your task list.", storage.getLoadWarning());
+    }
+
+    @Test
+    void load_missingFile_returnsEmptyListWithoutWarning() {
+        Path saveFile = temporaryDirectory.resolve("missing").resolve("tasks.txt");
+        Storage storage = new Storage(saveFile.toString());
+
+        List<Task> tasks = storage.load();
+
+        assertTrue(tasks.isEmpty());
+        assertNull(storage.getLoadWarning());
+    }
+
+    @Test
+    void save_parentPathIsAFile_throwsUserFriendlyException() throws IOException {
+        Path blockingFile = temporaryDirectory.resolve("not-a-directory");
+        Files.writeString(blockingFile, "blocking file");
+        Storage storage = new Storage(blockingFile.resolve("tasks.txt").toString());
+
+        StorageException exception = assertThrows(StorageException.class, () ->
+                storage.save(new TaskList(List.of(new Todo("read book")))));
+
+        assertEquals("I couldn't save that change. Please check that PeanutButterCat can write "
+                + "to its data folder, then try again.", exception.getMessage());
     }
 }

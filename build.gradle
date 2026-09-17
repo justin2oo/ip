@@ -67,7 +67,7 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'duke.jar'
+    archiveFileName = 'peanutbuttercat.jar'
 
     // Make the fat JAR directly executable with `java -jar`.
     manifest {

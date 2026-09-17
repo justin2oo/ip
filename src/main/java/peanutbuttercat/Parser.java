@@ -115,6 +115,10 @@ public class Parser {
         }
         LocalDateTime startTime = parseDateTime(from);
         LocalDateTime endTime = parseDateTime(to);
+        if (endTime.isBefore(startTime)) {
+            throw new PeanutButterCatException(
+                    "That event ends before it starts. Please check the '/from' and '/to' times!");
+        }
         return new Event(description, startTime, endTime);
     }
 

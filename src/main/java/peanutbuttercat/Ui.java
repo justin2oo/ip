@@ -13,11 +13,20 @@ public class Ui {
 
     /** Displays the chatbot's welcome message. */
     public void showWelcome() {
+        showWelcome(getWelcomeMessage());
+    }
+
+    /**
+     * Displays the chatbot banner followed by a supplied startup message.
+     *
+     * @param welcomeMessage Startup message to display below the banner.
+     */
+    public void showWelcome(String welcomeMessage) {
         System.out.println(HORIZONTAL_LINE);
         System.out.println(" /\\_/\\\n"
                 + "( o.o )  PeanutButterCat\n"
                 + " > u <");
-        System.out.println(getWelcomeMessage());
+        System.out.println(welcomeMessage);
         showLine();
     }
 

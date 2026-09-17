@@ -27,7 +27,7 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private PeanutButterCat peanutButterCat;
-    private final Image peanutButterCatImage = loadImage("/images/DaDuke.png");
+    private final Image peanutButterCatImage = loadImage("/images/PeanutButterCat.png");
 
     /** Keeps the latest dialog visible after a message is added. */
     @FXML

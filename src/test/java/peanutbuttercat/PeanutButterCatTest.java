@@ -75,6 +75,7 @@ class PeanutButterCatTest {
 
         assertTrue(peanutButterCat.isExitCommand(" bye "));
         assertFalse(peanutButterCat.isExitCommand("list"));
+        assertFalse(peanutButterCat.isExitCommand(null));
     }
 
     @Test
@@ -115,6 +116,33 @@ class PeanutButterCatTest {
                         + "Note: 1 completed task has an unknown completion date and was not counted.",
                 peanutButterCat.getResponse("stats"));
         assertEquals(List.of("T | 1 | old completed task"), Files.readAllLines(saveFile));
+    }
+
+    @Test
+    void getResponse_storageFailure_returnsErrorAndRevertsTaskChange() throws IOException {
+        Path blockingFile = temporaryDirectory.resolve("not-a-directory");
+        Files.writeString(blockingFile, "blocking file");
+        PeanutButterCat peanutButterCat = new PeanutButterCat(
+                new Storage(blockingFile.resolve("tasks.txt").toString()), new Parser());
+
+        assertEquals("I couldn't save that change. Please check that PeanutButterCat can write "
+                        + "to its data folder, then try again.",
+                peanutButterCat.getResponse("todo buy cat food"));
+        assertEquals("Here's what's tucked in the task jar:", peanutButterCat.getResponse("list"));
+    }
+
+    @Test
+    void getWelcomeMessage_invalidSavedRecord_includesRecoveryWarning() throws IOException {
+        Path saveFile = temporaryDirectory.resolve("invalid").resolve("tasks.txt");
+        Files.createDirectories(saveFile.getParent());
+        Files.writeString(saveFile, "this is not a task record");
+
+        PeanutButterCat peanutButterCat = new PeanutButterCat(
+                new Storage(saveFile.toString()), new Parser());
+
+        assertTrue(peanutButterCat.getWelcomeMessage().contains(
+                "Heads up: some saved task data could not be read. I recovered what I could"));
+        assertEquals("Here's what's tucked in the task jar:", peanutButterCat.getResponse("list"));
     }
 
     private PeanutButterCat createChatbot() {

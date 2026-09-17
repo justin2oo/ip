@@ -14,9 +14,19 @@ import java.util.List;
  * Loads tasks from and saves tasks to the application's storage file.
  */
 public class Storage {
-    private final Path saveFile;
+    private static final String LOAD_WARNING = "Heads up: some saved task data could not be read. "
+            + "I recovered what I could, so please check your task list.";
+    private static final String SAVE_ERROR = "I couldn't save that change. Please check that "
+            + "PeanutButterCat can write to its data folder, then try again.";
 
-    /** Creates storage backed by the supplied file path. */
+    private final Path saveFile;
+    private String loadWarning;
+
+    /**
+     * Creates storage backed by the supplied file path.
+     *
+     * @param filePath Location of the task data file.
+     */
     public Storage(String filePath) {
         this.saveFile = Path.of(filePath);
     }
@@ -25,38 +35,43 @@ public class Storage {
      * Saves all tasks using the existing atomic-replacement strategy.
      *
      * @param tasks Tasks to save.
+     * @throws StorageException If the tasks cannot be written safely.
      */
-    public void save(TaskList tasks) {
+    public void save(TaskList tasks) throws StorageException {
         List<String> taskRecords = tasks.asList().stream()
                 .map(Task::toFileString)
                 .toList();
 
         try {
-            Files.createDirectories(saveFile.getParent());
-            Path temporaryFile = Files.createTempFile(saveFile.getParent(), "duke", ".tmp");
+            Path storageDirectory = saveFile.toAbsolutePath().getParent();
+            assert storageDirectory != null : "An absolute save path must have a parent directory";
+
+            Files.createDirectories(storageDirectory);
+            Path temporaryFile = Files.createTempFile(storageDirectory, "peanutbuttercat-", ".tmp");
             try {
                 Files.write(temporaryFile, taskRecords);
                 try {
-                    Files.move(temporaryFile, saveFile, StandardCopyOption.REPLACE_EXISTING,
+                    Files.move(temporaryFile, saveFile.toAbsolutePath(), StandardCopyOption.REPLACE_EXISTING,
                             StandardCopyOption.ATOMIC_MOVE);
                 } catch (java.nio.file.AtomicMoveNotSupportedException exception) {
-                    Files.move(temporaryFile, saveFile, StandardCopyOption.REPLACE_EXISTING);
+                    Files.move(temporaryFile, saveFile.toAbsolutePath(), StandardCopyOption.REPLACE_EXISTING);
                 }
             } finally {
                 Files.deleteIfExists(temporaryFile);
             }
         } catch (IOException | SecurityException exception) {
-            System.err.println("Unable to save tasks: " + exception.getMessage());
+            throw new StorageException(SAVE_ERROR, exception);
         }
     }
 
     /**
      * Loads saved tasks, ignoring blank or malformed records as before.
      *
-     * @return The loaded tasks, or an empty list when the file is unavailable.
+     * @return The valid loaded tasks, or an empty list when the file is missing or unavailable.
      */
     public List<Task> load() {
         List<Task> tasks = new ArrayList<>();
+        loadWarning = null;
         try {
             if (!Files.exists(saveFile)) {
                 return tasks;
@@ -71,15 +86,22 @@ public class Storage {
                     tasks.add(createTaskFromRecord(taskRecord, lineNumber));
                 } catch (IllegalArgumentException exception) {
                     System.err.println("Ignoring invalid task record at line " + lineNumber + ".");
+                    loadWarning = LOAD_WARNING;
                 }
             }
         } catch (IOException | SecurityException exception) {
             System.err.println("Unable to load tasks: " + exception.getMessage());
+            loadWarning = LOAD_WARNING;
         }
         return tasks;
     }
 
-    private static Task createTaskFromRecord(String taskRecord, int lineNumber) {
+    /** Returns a user-friendly warning after a load problem, or {@code null} if loading was clean. */
+    String getLoadWarning() {
+        return loadWarning;
+    }
+
+    private Task createTaskFromRecord(String taskRecord, int lineNumber) {
         String[] details = splitStorageRecord(taskRecord);
         if (details.length < 3 || (!details[1].equals("0") && !details[1].equals("1"))) {
             throw new IllegalArgumentException("Malformed task record");
@@ -116,6 +138,7 @@ public class Storage {
                 }
             } catch (IllegalArgumentException exception) {
                 System.err.println("Ignoring invalid completion metadata at line " + lineNumber + ".");
+                loadWarning = LOAD_WARNING;
                 completionDate = null;
             }
         }
