@@ -53,6 +53,26 @@ class PeanutButterCatTest {
     }
 
     @Test
+    void getResponse_blankCommand_returnsSpecificError() {
+        PeanutButterCat peanutButterCat = createChatbot();
+
+        assertEquals("I didn't catch a command. Type something for me to do, purr-lease!",
+                peanutButterCat.getResponse("   "));
+    }
+
+    @Test
+    void getResponse_duplicateTask_rejectsDuplicateAndKeepsSingleTask() {
+        PeanutButterCat peanutButterCat = createChatbot();
+        peanutButterCat.getResponse("todo read book");
+
+        assertEquals("That task is already in the jar. Try adding something different!",
+                peanutButterCat.getResponse("todo READ   book"));
+        assertEquals("Here's what's tucked in the task jar:" + System.lineSeparator()
+                        + "1.[T][ ] read book",
+                peanutButterCat.getResponse("list"));
+    }
+
+    @Test
     void getResponse_statusChangesAndDelete_returnsPersonalityResponses() {
         PeanutButterCat peanutButterCat = createChatbot(fixedClock());
         peanutButterCat.getResponse("todo submit report");
@@ -67,6 +87,18 @@ class PeanutButterCatTest {
                         + "  [T][ ] submit report" + System.lineSeparator()
                         + "The task jar now holds 0 tasks.",
                 peanutButterCat.getResponse("delete 1"));
+    }
+
+    @Test
+    void getResponse_repeatedStatusChange_returnsSpecificError() {
+        PeanutButterCat peanutButterCat = createChatbot(fixedClock());
+        peanutButterCat.getResponse("todo submit report");
+
+        assertEquals("That task is already active. No change needed!",
+                peanutButterCat.getResponse("unmark 1"));
+        peanutButterCat.getResponse("mark 1");
+        assertEquals("That task is already marked as done. No change needed!",
+                peanutButterCat.getResponse("mark 1"));
     }
 
     @Test

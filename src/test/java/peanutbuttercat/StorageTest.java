@@ -113,6 +113,24 @@ class StorageTest {
     }
 
     @Test
+    void load_duplicateAndInvalidEventRecords_skipsRecordsAndWarns() throws IOException {
+        Path saveFile = temporaryDirectory.resolve("data").resolve("tasks.txt");
+        Files.createDirectories(saveFile.getParent());
+        Files.write(saveFile, List.of(
+                "T | 0 | read book",
+                "T | 1 | READ BOOK | 2026-09-09",
+                "E | 0 | invalid meeting | 2026-09-11T11:00 | 2026-09-11T10:00"));
+        Storage storage = new Storage(saveFile.toString());
+
+        List<Task> tasks = storage.load();
+
+        assertEquals(1, tasks.size());
+        assertEquals("[T][ ] read book", tasks.get(0).toString());
+        assertEquals("Heads up: some saved task data could not be read. "
+                + "I recovered what I could, so please check your task list.", storage.getLoadWarning());
+    }
+
+    @Test
     void save_parentPathIsAFile_throwsUserFriendlyException() throws IOException {
         Path blockingFile = temporaryDirectory.resolve("not-a-directory");
         Files.writeString(blockingFile, "blocking file");

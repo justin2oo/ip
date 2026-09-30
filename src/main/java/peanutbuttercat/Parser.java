@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAccessor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Interprets raw user input and validates command arguments.
@@ -30,7 +32,7 @@ public class Parser {
         assert commandWord != null && !commandWord.isBlank() : "Command word must not be blank";
         assert command.trim().startsWith(commandWord) : "Command must start with its command word";
 
-        String description = command.substring(commandWord.length()).trim();
+        String description = normalizeWhitespace(command.substring(commandWord.length()));
         if (description.isEmpty()) {
             throw new PeanutButterCatException("Oops, this kitty needs a description for your "
                     + commandWord + "! Please add one after '" + commandWord + "'.");
@@ -69,13 +71,10 @@ public class Parser {
                 : "Deadline parser must receive a deadline command";
 
         String details = command.substring(CommandType.DEADLINE.getCommandWord().length()).trim();
-        int byIndex = details.indexOf("/by");
-        if (byIndex < 0) {
-            throw new PeanutButterCatException("My whiskers can't find the deadline! Use: "
-                    + "deadline DESCRIPTION /by TIME");
-        }
-        String description = details.substring(0, byIndex).trim();
-        String by = details.substring(byIndex + "/by".length()).trim();
+        int byIndex = findSingleParameter(details, "/by",
+                "My whiskers can't find the deadline! Use: deadline DESCRIPTION /by TIME");
+        String description = normalizeWhitespace(details.substring(0, byIndex));
+        String by = normalizeWhitespace(details.substring(byIndex + "/by".length()));
         if (description.isEmpty()) {
             throw new PeanutButterCatException("Oops, this kitty needs a description for your deadline!");
         }
@@ -98,15 +97,16 @@ public class Parser {
                 : "Event parser must receive an event command";
 
         String details = command.substring(CommandType.EVENT.getCommandWord().length()).trim();
-        int fromIndex = details.indexOf("/from");
-        int toIndex = fromIndex < 0 ? -1 : details.indexOf("/to", fromIndex + "/from".length());
-        if (fromIndex < 0 || toIndex < 0) {
-            throw new PeanutButterCatException("My whiskers need the whole time trail! Use: "
-                    + "event DESCRIPTION /from START /to END");
+        String usageMessage = "My whiskers need the whole time trail! Use: "
+                + "event DESCRIPTION /from START /to END";
+        int fromIndex = findSingleParameter(details, "/from", usageMessage);
+        int toIndex = findSingleParameter(details, "/to", usageMessage);
+        if (fromIndex > toIndex) {
+            throw new PeanutButterCatException(usageMessage);
         }
-        String description = details.substring(0, fromIndex).trim();
-        String from = details.substring(fromIndex + "/from".length(), toIndex).trim();
-        String to = details.substring(toIndex + "/to".length()).trim();
+        String description = normalizeWhitespace(details.substring(0, fromIndex));
+        String from = normalizeWhitespace(details.substring(fromIndex + "/from".length(), toIndex));
+        String to = normalizeWhitespace(details.substring(toIndex + "/to".length()));
         if (description.isEmpty()) {
             throw new PeanutButterCatException("Oops, this kitty needs a description for your event!");
         }
@@ -115,18 +115,19 @@ public class Parser {
         }
         LocalDateTime startTime = parseDateTime(from);
         LocalDateTime endTime = parseDateTime(to);
-        if (endTime.isBefore(startTime)) {
+        if (!endTime.isAfter(startTime)) {
             throw new PeanutButterCatException(
-                    "That event ends before it starts. Please check the '/from' and '/to' times!");
+                    "An event must end after it starts. Please check the '/from' and '/to' times!");
         }
         return new Event(description, startTime, endTime);
     }
 
     /** Parses a supported date or date-time value. */
     public LocalDateTime parseDateTime(String value) throws PeanutButterCatException {
+        String normalizedValue = normalizeWhitespace(value);
         for (DateTimeFormatter format : INPUT_FORMATS) {
             try {
-                TemporalAccessor parsed = format.parse(value);
+                TemporalAccessor parsed = format.parse(normalizedValue);
                 LocalDate date = LocalDate.from(parsed);
                 return parsed.isSupported(java.time.temporal.ChronoField.HOUR_OF_DAY)
                         ? LocalDateTime.from(parsed) : date.atStartOfDay();
@@ -147,8 +148,9 @@ public class Parser {
             throw new PeanutButterCatException("Which date should I search? Use: on yyyy-MM-dd");
         }
         try {
-            return parseDateTime(value).toLocalDate();
-        } catch (PeanutButterCatException exception) {
+            return LocalDate.parse(normalizeWhitespace(value),
+                    DateTimeFormatter.ISO_LOCAL_DATE.withResolverStyle(ResolverStyle.STRICT));
+        } catch (DateTimeParseException exception) {
             throw new PeanutButterCatException("I couldn't understand that date. Use yyyy-MM-dd, purr-lease!");
         }
     }
@@ -166,6 +168,10 @@ public class Parser {
             throw new PeanutButterCatException("Which task should I " + commandWord
                     + "? Give me its number, purr-lease!");
         }
+        if (!numberText.matches("\\d+")) {
+            throw new PeanutButterCatException("My paws can only count whole task numbers. "
+                    + "Try '" + commandWord + " 1', for example!");
+        }
         int taskNumber;
         try {
             taskNumber = Integer.parseInt(numberText);
@@ -180,5 +186,23 @@ public class Parser {
         int taskIndex = taskNumber - 1;
         assert taskIndex >= 0 && taskIndex < numberOfTasks : "Validated task index must be in range";
         return taskIndex;
+    }
+
+    private static int findSingleParameter(String details, String parameter, String missingMessage)
+            throws PeanutButterCatException {
+        Pattern parameterPattern = Pattern.compile("(?<!\\S)" + Pattern.quote(parameter) + "(?!\\S)");
+        Matcher matcher = parameterPattern.matcher(details);
+        if (!matcher.find()) {
+            throw new PeanutButterCatException(missingMessage);
+        }
+        int parameterIndex = matcher.start();
+        if (matcher.find()) {
+            throw new PeanutButterCatException("Use '" + parameter + "' only once in each command, purr-lease!");
+        }
+        return parameterIndex;
+    }
+
+    private static String normalizeWhitespace(String value) {
+        return value == null ? "" : value.trim().replaceAll("\\s+", " ");
     }
 }

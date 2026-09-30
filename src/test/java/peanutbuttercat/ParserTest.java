@@ -31,6 +31,11 @@ class ParserTest {
     }
 
     @Test
+    void getDescription_multipleWhitespace_normalizesDescription() throws PeanutButterCatException {
+        assertEquals("buy fresh milk", parser.getDescription("todo  buy\t fresh   milk", "todo"));
+    }
+
+    @Test
     void getDescription_commandWithoutText_exceptionThrown() {
         assertThrows(PeanutButterCatException.class, () ->
                 parser.getDescription("todo   ", "todo"));
@@ -81,6 +86,20 @@ class ParserTest {
     }
 
     @Test
+    void parseDeadline_duplicateByMarker_exceptionThrownWithHelpfulMessage() {
+        PeanutButterCatException exception = assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDeadline("deadline submit /by report /by 2019-12-02"));
+
+        assertEquals("Use '/by' only once in each command, purr-lease!", exception.getMessage());
+    }
+
+    @Test
+    void parseDeadline_markerAsPartOfWord_exceptionThrown() {
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDeadline("deadline submit /bypass 2019-12-02"));
+    }
+
+    @Test
     void parseEvent_validInput_returnsDescriptionAndTimeRange() throws PeanutButterCatException {
         Event event = parser.parseEvent(
                 "event team meeting /from 2019-12-02 1900 /to 2019-12-02 2000");
@@ -125,8 +144,25 @@ class ParserTest {
         PeanutButterCatException exception = assertThrows(PeanutButterCatException.class, () ->
                 parser.parseEvent("event team meeting /from 2019-12-02 2000 /to 2019-12-02 1900"));
 
-        assertEquals("That event ends before it starts. Please check the '/from' and '/to' times!",
+        assertEquals("An event must end after it starts. Please check the '/from' and '/to' times!",
                 exception.getMessage());
+    }
+
+    @Test
+    void parseEvent_sameStartAndEnd_exceptionThrownWithHelpfulMessage() {
+        PeanutButterCatException exception = assertThrows(PeanutButterCatException.class, () ->
+                parser.parseEvent("event team meeting /from 2019-12-02 1900 /to 2019-12-02 1900"));
+
+        assertEquals("An event must end after it starts. Please check the '/from' and '/to' times!",
+                exception.getMessage());
+    }
+
+    @Test
+    void parseEvent_duplicateOrReorderedMarkers_exceptionThrown() {
+        assertThrows(PeanutButterCatException.class, () -> parser.parseEvent(
+                "event meeting /from 2019-12-02 /from 2019-12-03 /to 2019-12-04"));
+        assertThrows(PeanutButterCatException.class, () -> parser.parseEvent(
+                "event meeting /to 2019-12-03 /from 2019-12-02"));
     }
 
     @Test
@@ -136,6 +172,8 @@ class ParserTest {
                 parser.parseDateTime("2/12/2019 1800"));
         assertEquals(LocalDateTime.of(2019, 12, 2, 19, 30),
                 parser.parseDateTime("2019-12-02 19:30"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 19, 30),
+                parser.parseDateTime("  2019-12-02    19:30  "));
         assertEquals(LocalDateTime.of(2019, 12, 2, 0, 0),
                 parser.parseDateTime("2019-12-02"));
     }
@@ -169,6 +207,12 @@ class ParserTest {
     }
 
     @Test
+    void parseDate_dateWithTime_exceptionThrown() {
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseDate("on 2019-12-02 1900"));
+    }
+
+    @Test
     void parseTaskIndex_validFirstTask_returnsZeroBasedIndex() throws PeanutButterCatException {
         assertEquals(0, parser.parseTaskIndex("done 1", "done", 3));
     }
@@ -188,6 +232,8 @@ class ParserTest {
     void parseTaskIndex_nonNumericNumber_exceptionThrown() {
         assertThrows(PeanutButterCatException.class, () ->
                 parser.parseTaskIndex("done two", "done", 3));
+        assertThrows(PeanutButterCatException.class, () ->
+                parser.parseTaskIndex("done +1", "done", 3));
     }
 
     @Test

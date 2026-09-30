@@ -2,6 +2,7 @@ package peanutbuttercat;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
@@ -73,9 +74,6 @@ public class Storage {
         List<Task> tasks = new ArrayList<>();
         loadWarning = null;
         try {
-            if (!Files.exists(saveFile)) {
-                return tasks;
-            }
             int lineNumber = 0;
             for (String taskRecord : Files.readAllLines(saveFile)) {
                 lineNumber++;
@@ -83,12 +81,18 @@ public class Storage {
                     continue;
                 }
                 try {
-                    tasks.add(createTaskFromRecord(taskRecord, lineNumber));
+                    Task task = createTaskFromRecord(taskRecord, lineNumber);
+                    if (tasks.stream().anyMatch(existingTask -> existingTask.hasSameDetails(task))) {
+                        throw new IllegalArgumentException("Duplicate task record");
+                    }
+                    tasks.add(task);
                 } catch (IllegalArgumentException exception) {
                     System.err.println("Ignoring invalid task record at line " + lineNumber + ".");
                     loadWarning = LOAD_WARNING;
                 }
             }
+        } catch (NoSuchFileException exception) {
+            return tasks;
         } catch (IOException | SecurityException exception) {
             System.err.println("Unable to load tasks: " + exception.getMessage());
             loadWarning = LOAD_WARNING;

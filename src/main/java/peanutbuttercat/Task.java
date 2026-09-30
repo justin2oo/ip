@@ -125,9 +125,20 @@ public class Task {
         return description;
     }
 
+    /** Returns whether another task has the same type and user-provided details. */
+    boolean hasSameDetails(Task other) {
+        return other != null
+                && getClass().equals(other.getClass())
+                && normalizeDescription(description).equalsIgnoreCase(normalizeDescription(other.description));
+    }
+
     /** Appends the optional completion date to a task's storage record. */
     protected String appendCompletionDate(String taskRecord) {
         return completionDate == null ? taskRecord : taskRecord + " | " + completionDate;
+    }
+
+    private static String normalizeDescription(String value) {
+        return value.replaceAll("\\s+", " ");
     }
 
     private String getStatusIcon() {

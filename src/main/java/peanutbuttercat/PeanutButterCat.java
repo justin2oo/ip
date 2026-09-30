@@ -97,8 +97,14 @@ public class PeanutButterCat {
                 case EVENT -> addEvent(command);
                 case ON -> ui.getTasksOnDateMessage(parser.parseDate(command), tasks);
                 case STATISTICS -> getStatistics(command, commandType);
-                case UNKNOWN -> throw new PeanutButterCatException(
-                        "My whiskers can't sort that command yet. Try another scoop, purr-lease!");
+                case UNKNOWN -> {
+                    if (command.isEmpty()) {
+                        throw new PeanutButterCatException(
+                                "I didn't catch a command. Type something for me to do, purr-lease!");
+                    }
+                    throw new PeanutButterCatException(
+                            "My whiskers can't sort that command yet. Try another scoop, purr-lease!");
+                }
             };
         } catch (PeanutButterCatException | StorageException exception) {
             return ui.getErrorMessage(exception.getMessage());
@@ -163,7 +169,11 @@ public class PeanutButterCat {
         return addTask(event);
     }
 
-    private String addTask(Task task) throws StorageException {
+    private String addTask(Task task) throws PeanutButterCatException, StorageException {
+        if (tasks.containsSameDetails(task)) {
+            throw new PeanutButterCatException(
+                    "That task is already in the jar. Try adding something different!");
+        }
         tasks.add(task);
         try {
             storage.save(tasks);
@@ -205,6 +215,10 @@ public class PeanutButterCat {
         Task task = tasks.get(taskIndex);
         boolean wasDone = task.isDone();
         LocalDate previousCompletionDate = task.getCompletionDate();
+        if (isDone == wasDone) {
+            String status = isDone ? "already marked as done" : "already active";
+            throw new PeanutButterCatException("That task is " + status + ". No change needed!");
+        }
         if (isDone) {
             task.markAsDone(LocalDate.now(clock));
         } else {

@@ -23,6 +23,9 @@ public class Event extends Task {
         if (from == null || to == null) {
             throw new IllegalArgumentException("Event dates cannot be blank.");
         }
+        if (!to.isAfter(from)) {
+            throw new IllegalArgumentException("Event end time must be after its start time.");
+        }
         this.from = from;
         this.to = to;
     }
@@ -43,6 +46,17 @@ public class Event extends Task {
      */
     public LocalDateTime getTo() {
         return to;
+    }
+
+    /** Returns whether another event has the same description and time range. */
+    @Override
+    boolean hasSameDetails(Task other) {
+        if (!(other instanceof Event otherEvent)) {
+            return false;
+        }
+        return super.hasSameDetails(other)
+                && from.equals(otherEvent.from)
+                && to.equals(otherEvent.to);
     }
 
     /**

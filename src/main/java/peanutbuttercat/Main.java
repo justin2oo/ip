@@ -5,7 +5,9 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -26,8 +28,16 @@ public class Main extends Application {
             stage.setMinWidth(457);
             fxmlLoader.<MainWindow>getController().setPeanutButterCat(peanutButterCat);
             stage.show();
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException | RuntimeException exception) {
+            System.err.println("Unable to start PeanutButterCat: " + exception.getMessage());
+            Label errorMessage = new Label("PeanutButterCat could not start because its interface files "
+                    + "are missing or unreadable. Please reinstall the application.");
+            errorMessage.setWrapText(true);
+            StackPane errorPane = new StackPane(errorMessage);
+            errorPane.setStyle("-fx-padding: 24;");
+            stage.setScene(new Scene(errorPane, 457, 160));
+            stage.setTitle("PeanutButterCat — Startup Error");
+            stage.show();
         }
     }
 }

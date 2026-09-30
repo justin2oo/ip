@@ -1,6 +1,7 @@
 package peanutbuttercat;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -35,5 +36,15 @@ class TaskDateTest {
         Todo todo = new Todo("buy milk");
 
         assertFalse(todo.occursOn(LocalDate.of(2026, 9, 9)));
+    }
+
+    @Test
+    void constructor_nonPositiveEventDuration_exceptionThrown() {
+        LocalDateTime startTime = LocalDateTime.of(2026, 9, 9, 18, 0);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new Event("zero duration", startTime, startTime));
+        assertThrows(IllegalArgumentException.class, () ->
+                new Event("negative duration", startTime, startTime.minusMinutes(1)));
     }
 }

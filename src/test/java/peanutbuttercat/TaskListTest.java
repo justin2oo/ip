@@ -1,6 +1,8 @@
 package peanutbuttercat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +28,20 @@ class TaskListTest {
         TaskList tasks = new TaskList(List.of(new Todo("Read a book")));
 
         assertEquals(List.of(), tasks.findByDescription("travel"));
+    }
+
+    @Test
+    void containsSameDetails_sameDetailsIgnoringCase_returnsTrue() {
+        TaskList tasks = new TaskList(List.of(
+                new Todo("Read a book"),
+                new Deadline("Return book", java.time.LocalDateTime.of(2026, 6, 6, 18, 0))));
+
+        assertTrue(tasks.containsSameDetails(new Todo("read a book")));
+        assertTrue(tasks.containsSameDetails(new Todo("read  a   book")));
+        assertTrue(tasks.containsSameDetails(
+                new Deadline("return BOOK", java.time.LocalDateTime.of(2026, 6, 6, 18, 0))));
+        assertFalse(tasks.containsSameDetails(
+                new Deadline("return book", java.time.LocalDateTime.of(2026, 6, 7, 18, 0))));
     }
 
     @Test

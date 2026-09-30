@@ -189,7 +189,7 @@ ____________________________________________________________
 My paws can only count whole task numbers. Try 'mark 1', for example!
 ____________________________________________________________
 ____________________________________________________________
-That event ends before it starts. Please check the '/from' and '/to' times!
+An event must end after it starts. Please check the '/from' and '/to' times!
 ____________________________________________________________
 ____________________________________________________________
 My whiskers can't sort that command yet. Try another scoop, purr-lease!
@@ -202,6 +202,66 @@ ____________________________________________________________
 ____________________________________________________________
 Here's what's tucked in the task jar:
 1.[T][ ] recover gracefully
+____________________________________________________________
+____________________________________________________________
+The task jar is safe with me. Stay smooth, and see you soon!
+____________________________________________________________
+```
+
+## Test case: Reject ambiguous and duplicate data
+**Aim:** Verify that extra spacing is accepted while duplicate tasks, parameters, status updates, invalid query formats, and zero-length events are explained.
+### Inputs
+```text
+   todo   read   book
+todo READ book
+deadline submit report /by draft /by 2026-10-01
+event instant meeting /from 2026-10-01 1200 /to 2026-10-01 1200
+on 2026-10-01 1200
+unmark 1
+mark 1
+mark 1
+list
+bye
+```
+### Expected output
+```text
+____________________________________________________________
+ /\_/\
+( o.o )  PeanutButterCat
+ > u <
+Hello! I'm PeanutButterCat, your cozy, snack-powered task keeper.
+Tell me what's on your plate, and I'll tuck it into the task jar.
+____________________________________________________________
+____________________________________________________________
+Spread the word - this task is in the jar:
+[T][ ] read book
+The task jar now holds 1 task.
+____________________________________________________________
+____________________________________________________________
+That task is already in the jar. Try adding something different!
+____________________________________________________________
+____________________________________________________________
+Use '/by' only once in each command, purr-lease!
+____________________________________________________________
+____________________________________________________________
+An event must end after it starts. Please check the '/from' and '/to' times!
+____________________________________________________________
+____________________________________________________________
+I couldn't understand that date. Use yyyy-MM-dd, purr-lease!
+____________________________________________________________
+____________________________________________________________
+That task is already active. No change needed!
+____________________________________________________________
+____________________________________________________________
+Paw-some! That's one smooth finish:
+  [T][X] read book
+____________________________________________________________
+____________________________________________________________
+That task is already marked as done. No change needed!
+____________________________________________________________
+____________________________________________________________
+Here's what's tucked in the task jar:
+1.[T][X] read book
 ____________________________________________________________
 ____________________________________________________________
 The task jar is safe with me. Stay smooth, and see you soon!

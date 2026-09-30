@@ -51,6 +51,11 @@ public class TaskList {
         return tasks.size();
     }
 
+    /** Returns whether a task with the same type and details is already stored. */
+    public boolean containsSameDetails(Task task) {
+        return tasks.stream().anyMatch(existingTask -> existingTask.hasSameDetails(task));
+    }
+
     /** Returns the tasks for read-only iteration by coordinating components. */
     public List<Task> asList() {
         return List.copyOf(tasks);
